@@ -1,0 +1,19 @@
+.btn-bd-primary {
+  --bs-btn-font-weight: 400;
+  --bs-btn-color: white;
+  --bs-btn-hover-color: white;
+  --bs-btn-active-color: white;
+
+  --bs-btn-border-radius: 0.5rem;
+  --bs-btn-border-color: black;
+  --bs-btn-hover-border-color: black;
+  --bs-btn-active-border-color: black;
+
+  background-image: linear-gradient(145deg, #282829, #212122);
+
+  box-shadow: 1px 1px 1px #131314, -1px -1px 1px #373738;
+}
+.btn-bd-primary:active {
+  background-image: linear-gradient(145deg, #212122, #282829);
+  box-shadow: inset 1px 1px 1px #131314, inset -1px -1px 1px #373738;
+}
