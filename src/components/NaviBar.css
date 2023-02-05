@@ -1,4 +1,4 @@
-.btn-bd-primary {
+.btn-check {
   width: 227px;
   /* --bs-btn-font-weight: 400;
   --bs-btn-color: white;
@@ -14,14 +14,7 @@
 
   box-shadow: 0.5px 0.5px 0.5px #131314, 0.5px 0.5px 0.5px #373738;
 }
-.btn-bd-primary:active {
+.btn-check:active {
   background-image: linear-gradient(145deg, #111213, #151718);
   box-shadow: inset 0.5px 0.5px 0.5px #131314, inset -0.5px -0.5px 0.5px #373738;
-}
-.LogoNavbar6:active {
-  color: yellow;
-}
-
-.active svg {
-  fill: yellow;
 }

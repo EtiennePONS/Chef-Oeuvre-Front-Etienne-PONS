@@ -9,7 +9,7 @@ const NavBar = () => {
           <NavLink to="/" end className="nav-link">
             <button className="btn btn-lg btn-bd-primary me-4" type="button">
               <img
-                src="/icons/PageHome.png"
+                src="/icons/PageHome.svg"
                 alt="Logo Frigo"
                 width="80"
                 height="80"

@@ -39,7 +39,9 @@ function onMidiMessage(midiEvent: WebMidi.MIDIMessageEvent): void {
     // just look at note on and note off messages.
     if (command === 0x9) {
       // note number is the second byte.
-      let note = data[1];
+      let not = data[1];
+      let note = not + 1;
+      // let note = data[1];
       // velocity is the thrid byte.
       let velocity = data[2];
       // let commandName = command === 0x9 ? "Note On " : "Note Off";
