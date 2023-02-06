@@ -34,7 +34,11 @@ function onMidiMessage(midiEvent: WebMidi.MIDIMessageEvent): void {
     let command = status >>> 4;
     // channel 0-15 is the lower four bits.
     let channel = (status & 0xf) + 1;
-    // console.log(`Canal MIDI: ${channel}, Commande: ${status}`);
+    // let not = data[1];
+    // let velo = data[2];
+    // console.log(
+    //   `Canal MIDI: ${channel}, Commande: ${status}, Note: ${not}, Vélocité: ${velo}`
+    // );
 
     // just look at note on and note off messages.
     if (command === 0x9) {
