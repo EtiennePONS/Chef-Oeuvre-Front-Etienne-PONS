@@ -9,7 +9,6 @@ import "./App.css";
 import PageHome from "./pages/Page Home";
 import PageInscription from "./pages/Page Inscription";
 import PageConnexion from "./pages/Page Connexion";
-import NaviBar from "./components/NaviBar";
 
 function App() {
   return (
