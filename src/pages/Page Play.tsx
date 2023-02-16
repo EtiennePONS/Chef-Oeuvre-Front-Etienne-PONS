@@ -2,6 +2,10 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 // import "./Page Play.css";
 
+// interface PagePlayProps {
+//   objetUser: MusicienUtilisateur | undefined;
+// }
+
 interface Chanson {
   id: number;
   Titre: string;
