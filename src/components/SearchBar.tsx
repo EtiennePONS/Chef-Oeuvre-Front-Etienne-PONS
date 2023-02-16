@@ -1,0 +1,75 @@
+import { SetStateAction } from "react";
+import { Chanson } from "../pages/Page Media";
+// import "./Searchbar.css";
+
+interface SearchBarProps {
+  toutesChansonsAAfficher: Chanson[];
+  parentUseStateSearch: (event: SetStateAction<string>) => void;
+  parentUseStateFiltre: (event: SetStateAction<string>) => void;
+}
+
+// Ce composant attend une liste de catégorie à afficher
+const SearchBar = ({
+  toutesChansonsAAfficher,
+  parentUseStateSearch,
+  parentUseStateFiltre,
+}: SearchBarProps) => {
+  const handleChansonSelect = (e: any) => {
+    const chansonSelectedValue = e.currentTarget.value;
+    console.log("id de la chanson selectionnée : ", chansonSelectedValue);
+    parentUseStateFiltre(chansonSelectedValue); // fait appel à setChansonFilter dans Page-Média
+  };
+  const handleRecherche = (e: any) => {
+    const chansonRecherchedValue = e.currentTarget.value.toLocaleLowerCase();
+    console.log(chansonRecherchedValue);
+    parentUseStateSearch(chansonRecherchedValue);
+  };
+  console.log(toutesChansonsAAfficher, "toutesChansonsAAfficher");
+  return (
+    <div className="container">
+      <div className="row">
+        <div className="col-xs-8 col-xs-offset-2">
+          <div className="input-group">
+            <div className="input-group-btn search-panel input-group-text">
+              <div className="form-floating">
+                <select
+                  className="form-select"
+                  id="floatingSelect"
+                  aria-label="Floating label select example"
+                  defaultValue=""
+                  onChange={(e) => handleChansonSelect(e)}
+                >
+                  <option value="">Toutes les chansons</option>
+                  {toutesChansonsAAfficher.map((chanson) => {
+                    return (
+                      <option
+                        key={chanson.id}
+                        value={chanson.id}
+                        // key={`optioncateg${catégories.id}`}
+                      >
+                        {chanson.Titre}
+                      </option>
+                    );
+                  })}
+                  {/* Ici il faudra faire un map sur les catégories*/}
+                </select>
+                <label htmlFor="floatingSelect">Recherche</label>
+              </div>
+            </div>
+
+            <input
+              type="text"
+              className="form-control"
+              name="x"
+              id="search"
+              placeholder="Search"
+              onInput={(e) => handleRecherche(e)}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SearchBar;

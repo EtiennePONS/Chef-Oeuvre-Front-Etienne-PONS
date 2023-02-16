@@ -1,6 +1,6 @@
 import axios from "axios";
 import { FormEvent, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 const PageInscription = () => {
   const FirstnameElement = useRef<HTMLInputElement>(null);
@@ -83,8 +83,10 @@ const PageInscription = () => {
         </button>
       </div>
       <div className="form-floating mb-3">
-        <button type="submit" className="btn btn-primary mb-3">
-          Annuler
+        <button type="button" className="btn btn-primary mb-3">
+          <NavLink to="/" end className="nav-link">
+            Annuler
+          </NavLink>
         </button>
       </div>
     </div>
