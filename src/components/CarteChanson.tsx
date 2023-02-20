@@ -1,4 +1,4 @@
-import { Chanson } from "../pages/Page Media";
+import { Chanson } from "../pages/Page Play";
 
 interface CarteChansonProps {
   chansonAAfficher: Chanson;

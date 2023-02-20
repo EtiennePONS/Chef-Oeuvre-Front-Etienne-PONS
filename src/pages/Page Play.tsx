@@ -6,17 +6,24 @@ import { useEffect, useState } from "react";
 //   objetUser: MusicienUtilisateur | undefined;
 // }
 
-interface Chanson {
+export interface Chanson {
   id: number;
   Titre: string;
   CanalMidi: number;
   PgmMidi: number;
 }
-interface Visuel {
+export interface Visuel {
   id: number;
   Visuel: string;
   CanalMidi: number;
+  PgmMidi: number;
   NoteMidi: number;
+  chanson: {
+    id: number;
+    Titre: string;
+    CanalMidi: number;
+    PgmMidi: number;
+  };
 }
 
 let lastChanson: Chanson;
@@ -123,11 +130,13 @@ const PagePlay = () => {
       </div>
       <div className="card text-bg-sombre">
         <div className="card-body">
+          <h5 className="card-title">{visuelAAfficher?.chanson.Titre}</h5>
           <h5 className="card-title">{visuelAAfficher?.Visuel}</h5>
           <h6 className="card-subtitle mb-2 text-muted">
             Ch.
-            {visuelAAfficher?.CanalMidi}
+            {visuelAAfficher?.chanson.CanalMidi}
           </h6>
+          <p className="card-text">Pgm{visuelAAfficher?.chanson.PgmMidi}</p>
           <p className="card-text">Note{visuelAAfficher?.NoteMidi}</p>
         </div>
       </div>

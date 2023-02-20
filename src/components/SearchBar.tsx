@@ -1,5 +1,6 @@
 import { SetStateAction } from "react";
-import { Chanson } from "../pages/Page Media";
+import { Chanson } from "../pages/Page Play";
+
 // import "./Searchbar.css";
 
 interface SearchBarProps {

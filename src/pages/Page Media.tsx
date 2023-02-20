@@ -2,13 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import CarteChanson from "../components/CarteChanson";
 import Searchbar from "../components/SearchBar";
-
-export interface Chanson {
-  id: number;
-  Titre: string;
-  CanalMidi: number;
-  PgmMidi: number;
-}
+import { Chanson } from "./Page Play";
 
 const PageMedia = () => {
   useEffect(() => {
@@ -35,7 +29,7 @@ const PageMedia = () => {
         parentUseStateSearch={setSearch}
         parentUseStateFiltre={setChansonsFilter}
       />
-      <div className="SurfaceDeChoix" />
+      <div className="SurfaceDeChoixDeChansons" />
       {affichageChansons
         .filter((chanson) => {
           if (chansonsFilter !== "") {
@@ -47,7 +41,7 @@ const PageMedia = () => {
         .filter((Chanson) => {
           return Chanson.Titre.toLocaleLowerCase().includes(search);
         })
-        .map((chanson, i) => {
+        .map((chanson) => {
           return (
             <div key={chanson.id}>
               <CarteChanson
