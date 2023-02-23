@@ -42,7 +42,7 @@ return(
       >
         <div className="card-body">
           <h5 className="card-title">{visuel.chanson.Titre}</h5>
-          <p className="card-text">Ch.{visuel.Visuel}</p>
+          <p className="card-text">Ch.{visuel.chanson.CanalMidi}</p>
           <p className="card-text">Note {visuel.NoteMidi}</p>
         </div>
       </div>

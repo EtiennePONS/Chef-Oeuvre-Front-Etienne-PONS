@@ -1,7 +1,8 @@
 import axios from "axios";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import CarteVisuel from "../components/CarteVisuel";
-import { Visuel } from "./Page Play";
+import SearchBar from "../components/SearchBar";
+import { Chanson, Visuel } from "./Page Play";
 
 export interface visuelAModifier {
   Visuel: String;
@@ -15,13 +16,20 @@ export interface visuelAModifier {
 
 const PageGalerie = () => {
     useEffect(() => {
-        axios
+      axios
       // recuperation des données (tout les Visuels)
         .get("http://localhost:8080/api/visuel")
         .then((retourReponseVisuels) => {
         const listeCompleteVisuels = retourReponseVisuels.data;
         setAffichageVisuels(listeCompleteVisuels);
         // setChansonsAAfficher(retourReponseVisuels.data);
+      });
+      axios
+      // recuperation des données (toutes les chansons)
+        .get("http://localhost:8080/api/chanson")
+        .then((retourReponseChansons) => {
+        const listeCompleteChansons = retourReponseChansons.data;
+        setAffichageChansons(listeCompleteChansons);
       });
     }, []);
 
@@ -36,7 +44,7 @@ const PageGalerie = () => {
         chanson: {id:ChansonCreationVisuelElement.current?.value},
         })
         .then((retourVisuelCree)=>{
-        console.log(retourVisuelCree.data);       
+          window.location = document.location;    
         });
     };
 
@@ -44,7 +52,7 @@ const PageGalerie = () => {
         axios
         .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`)
         .then((retourChansonSupprimee)=>{
-        console.log(retourChansonSupprimee.data);
+          window.location = document.location;
         })
     };
 
@@ -55,12 +63,14 @@ const PageGalerie = () => {
         .patch(`http://localhost:8080/api/visuel/${idvisuelAModifier}`, visuelAModifier
   )
         .then((retourChansonModifiee)=>{
-
+          window.location = document.location;
 
     }).catch((error)=>
         console.log(error))
-  }; 
-    
+  };
+    const [search, setSearch] = useState<string>("");
+    const [chansonsFilter, setChansonsFilter] = useState<string>(""); 
+    const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
     const [affichageVisuels, setAffichageVisuels] = useState<Visuel[]>([]);
     const TitreCreationVisuelElement = useRef<HTMLInputElement>(null);
     const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
@@ -173,8 +183,25 @@ const PageGalerie = () => {
           </div>
         </div>
       </div>
+      <SearchBar
+        toutesChansonsAAfficher={affichageChansons}
+        parentUseStateSearch={setSearch}
+        parentUseStateFiltre={setChansonsFilter}
+      />
       <div className="SurfaceDeChoixDeVisuels" />
-      {affichageVisuels.map((visuel) => {
+      {affichageVisuels
+        .filter((visuel) =>{
+          if (chansonsFilter !=="") {
+            return visuel.chanson.id === Number(chansonsFilter);
+          } else {
+            return visuel.chanson.Titre;
+          }
+        })
+        .filter((visuel) =>{
+          return visuel.chanson.Titre.toLocaleLowerCase().includes (search);
+        })
+
+        .map((visuel) => {
         return (
             <CarteVisuel
               visuel={visuel}

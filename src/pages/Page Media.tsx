@@ -30,7 +30,6 @@ const PageMedia = () => {
       PgmMidi: PgmMidiCreationChansonElement.current?.value,
     })
     .then((retourChansonCreee)=>{
-      console.log(retourChansonCreee.data);
       window.location = document.location;       
     });
   };
@@ -39,14 +38,12 @@ const PageMedia = () => {
     axios
   .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`)
   .then((retourChansonSupprimee)=>{
-      console.log(retourChansonSupprimee.data);
        window.location = document.location;
 
     });
   };
 
   const handleModifChanson = (chansonAModifier:chansonAModifier, idchansonAModifier: number) =>{
-    console.log("Info modification",chansonAModifier)
 
     axios
   .patch(`http://localhost:8080/api/chanson/${idchansonAModifier}`,chansonAModifier
