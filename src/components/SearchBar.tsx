@@ -17,15 +17,12 @@ const SearchBar = ({
 }: SearchBarProps) => {
   const handleChansonSelect = (e: any) => {
     const chansonSelectedValue = e.currentTarget.value;
-    console.log("id de la chanson selectionnée : ", chansonSelectedValue);
     parentUseStateFiltre(chansonSelectedValue); // fait appel à setChansonFilter dans Page-Média
   };
   const handleRecherche = (e: any) => {
     const chansonRecherchedValue = e.currentTarget.value.toLocaleLowerCase();
-    console.log(chansonRecherchedValue);
     parentUseStateSearch(chansonRecherchedValue);
   };
-  console.log(toutesChansonsAAfficher, "toutesChansonsAAfficher");
   return (
     <div className="container">
       <div className="row">
