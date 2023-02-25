@@ -12,7 +12,8 @@ const CarteChanson = ({
   chanson, demandeSuppressionChanson, donneesPourModificationChanson
 }:
 CarteChansonProps) => {
-  const handleSuppressionChanson = () =>{demandeSuppressionChanson(chanson)}
+  const handleSuppressionChanson = () =>{demandeSuppressionChanson(chanson)
+  }
   const handleModifChanson = (chansonid: number) => {
     if (TitreModificationChansonElement.current && CanalMidiModificationChansonElement.current && PgmMidiModificationChansonElement.current) {      
       const chansonAModifier: chansonAModifier = {
@@ -117,5 +118,4 @@ CarteChansonProps) => {
     </div>
   );
 };
-
 export default CarteChanson;

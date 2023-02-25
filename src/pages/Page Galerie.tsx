@@ -10,75 +10,84 @@ export interface visuelAModifier {
   PgmMidi: Number;
   NoteMidi: Number;
   chanson:{
-    id: Number
+  id: Number
   }
 }
 
 const PageGalerie = () => {
-    useEffect(() => {
-      axios
+  useEffect(() => {
+    axios
       // recuperation des données (tout les Visuels)
-        .get("http://localhost:8080/api/visuel")
-        .then((retourReponseVisuels) => {
+      .get("http://localhost:8080/api/visuel")
+      .then((retourReponseVisuels) => {
         const listeCompleteVisuels = retourReponseVisuels.data;
         setAffichageVisuels(listeCompleteVisuels);
         // setChansonsAAfficher(retourReponseVisuels.data);
       });
-      axios
+    axios
       // recuperation des données (toutes les chansons)
-        .get("http://localhost:8080/api/chanson")
-        .then((retourReponseChansons) => {
+      .get("http://localhost:8080/api/chanson")
+      .then((retourReponseChansons) => {
         const listeCompleteChansons = retourReponseChansons.data;
         setAffichageChansons(listeCompleteChansons);
       });
-    }, []);
+  }, []);
 
-    const handleCreationVisuel = (e:FormEvent) => {
-        e.preventDefault();
-        axios
-        .post(`http://localhost:8080/api/visuel`, {
+  const handleCreationVisuel = (e: FormEvent) => {
+    e.preventDefault();
+    axios
+      .post(`http://localhost:8080/api/visuel`, {
         Visuel: TitreCreationVisuelElement.current?.value,
         CanalMidi: CanalMidiCreationVisuelElement.current?.value,
         PgmMidi: PgmMidiCreationVisuelElement.current?.value,
         NoteMidi: NoteMidiCreationVisuelElement.current?.value,
-        chanson: {id:ChansonCreationVisuelElement.current?.value},
-        })
-        .then((retourVisuelCree)=>{
-          window.location = document.location;    
-        });
-    };
-
-    const handleSuppVisuel = (visuelASupprimer:Visuel) =>{
-        axios
-        .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`)
-        .then((retourChansonSupprimee)=>{
-          window.location = document.location;
-        })
-    };
-
-    const handleModifVisuel = (visuelAModifier:visuelAModifier, idvisuelAModifier: number) =>{
-      console.log("Info modification", visuelAModifier, "info Id à modifier ", idvisuelAModifier)
-
-        axios
-        .patch(`http://localhost:8080/api/visuel/${idvisuelAModifier}`, visuelAModifier
-  )
-        .then((retourChansonModifiee)=>{
-          window.location = document.location;
-
-    }).catch((error)=>
-        console.log(error))
+        chanson: { id: ChansonCreationVisuelElement.current?.value },
+      })
+      .then((retourVisuelCree) => {
+        window.location = document.location;
+      });
   };
-    const [search, setSearch] = useState<string>("");
-    const [chansonsFilter, setChansonsFilter] = useState<string>(""); 
-    const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
-    const [affichageVisuels, setAffichageVisuels] = useState<Visuel[]>([]);
-    const TitreCreationVisuelElement = useRef<HTMLInputElement>(null);
-    const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
-    const PgmMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
-    const NoteMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
-    const ChansonCreationVisuelElement = useRef<HTMLInputElement>(null);
-  
-  return(
+
+  const handleSuppVisuel = (visuelASupprimer: Visuel) => {
+    axios
+      .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`)
+      .then((retourChansonSupprimee) => {
+        window.location = document.location;
+      });
+  };
+
+  const handleModifVisuel = (
+    visuelAModifier: visuelAModifier,
+    idvisuelAModifier: number
+  ) => {
+    console.log(
+      "Info modification",
+      visuelAModifier,
+      "info Id à modifier ",
+      idvisuelAModifier
+    );
+
+    axios
+      .patch(
+        `http://localhost:8080/api/visuel/${idvisuelAModifier}`,
+        visuelAModifier
+      )
+      .then((retourChansonModifiee) => {})
+      window.location = document.location
+
+  };
+
+  const [search, setSearch] = useState<string>("");
+  const [chansonsFilter, setChansonsFilter] = useState<string>("");
+  const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
+  const [affichageVisuels, setAffichageVisuels] = useState<Visuel[]>([]);
+  const TitreCreationVisuelElement = useRef<HTMLInputElement>(null);
+  const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
+  const PgmMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
+  const NoteMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
+  const ChansonCreationVisuelElement = useRef<HTMLInputElement>(null);
+
+  return (
     <div>
       <h1>Page-Visuels</h1>
       <button
@@ -110,15 +119,34 @@ const PageGalerie = () => {
               ></button>
             </div>
             <div className="modal-body">
+              <div className="form-floating mb-3">                
+                  <select className="form-select"       id="inputGroupSelect01" 
+                  aria-label="Floating label select example">
+                  <option value="Liste de chansons"></option>{affichageChansons.map((chanson) => {
+                    return (
+                      <option
+                        key={chanson.id}
+                        value={chanson.id}                        
+                      >
+                        {chanson.Titre}
+                      </option>
+                    );
+                  })}
+                  </select>
+                <label htmlFor="floatingInputValue"></label>
+                <label htmlFor="floatingPassword">Chanson</label>
+              </div>
               <div className="form-floating mb-3">
                 <input
-                  type="text"
+                  type="number"
+                  min="1"
+                  max="16"
                   className="form-control"
                   id="floatingPassword"
-                  placeholder="Chanson"
+                  placeholder=""
                   ref={ChansonCreationVisuelElement}
                 />
-                <label htmlFor="floatingPassword">Chanson</label>
+                <label htmlFor="floatingPassword">Chanson ID</label>
               </div>
               <div className="form-floating mb-3">
                 <input
@@ -153,7 +181,7 @@ const PageGalerie = () => {
                   ref={PgmMidiCreationVisuelElement}
                 />
                 <label htmlFor="floatingPassword">Programme Midi (1-128)</label>
-              </div>     
+              </div>
               <div className="form-floating mb-3">
                 <input
                   type="number"
@@ -166,17 +194,21 @@ const PageGalerie = () => {
                 />
                 <label htmlFor="floatingPassword">Note Midi (1-128)</label>
               </div>
-
             </div>
             <div className="modal-footer">
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-bs-dismiss="modal"            
+                data-bs-dismiss="modal"
               >
                 Annuler
               </button>
-              <button type="button" className="btn btn-primary" onClick={handleCreationVisuel} data-bs-dismiss="modal">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleCreationVisuel}
+                data-bs-dismiss="modal"
+              >
                 Creer le Visuel
               </button>
             </div>
@@ -190,29 +222,28 @@ const PageGalerie = () => {
       />
       <div className="SurfaceDeChoixDeVisuels" />
       {affichageVisuels
-        .filter((visuel) =>{
-          if (chansonsFilter !=="") {
+        .filter((visuel) => {
+          if (chansonsFilter !== "") {
             return visuel.chanson.id === Number(chansonsFilter);
           } else {
             return visuel.chanson.Titre;
           }
         })
-        .filter((visuel) =>{
-          return visuel.chanson.Titre.toLocaleLowerCase().includes (search);
+        .filter((visuel) => {
+          return visuel.chanson.Titre.toLocaleLowerCase().includes(search);
         })
 
         .map((visuel) => {
-        return (
+          return (
             <CarteVisuel
               visuel={visuel}
               demandeSuppressionVisuel={handleSuppVisuel}
               donneesPourModificationVisuel={handleModifVisuel}
               key={visuel.id}
             />
-
-        );
-      })}
+          );
+        })}
     </div>
   );
-}
+};
 export default PageGalerie;

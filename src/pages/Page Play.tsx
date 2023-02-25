@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 //   objetUser: MusicienUtilisateur | undefined;
 // }
 
-
 export interface Chanson {
   id: number;
   Titre: string;
@@ -16,8 +15,6 @@ export interface Chanson {
 export interface Visuel {
   id: number;
   Visuel: string;
-  CanalMidi: number;
-  PgmMidi: number;
   NoteMidi: number;
   chanson: {
     id: number;

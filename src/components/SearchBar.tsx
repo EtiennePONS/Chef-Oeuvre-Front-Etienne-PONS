@@ -42,14 +42,12 @@ const SearchBar = ({
                     return (
                       <option
                         key={chanson.id}
-                        value={chanson.id}
-                        // key={`optioncateg${catégories.id}`}
+                        value={chanson.id}                
                       >
                         {chanson.Titre}
                       </option>
                     );
                   })}
-                  {/* Ici il faudra faire un map sur les catégories*/}
                 </select>
                 <label htmlFor="floatingSelect">Recherche</label>
               </div>

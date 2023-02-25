@@ -24,20 +24,20 @@ const PageMedia = () => {
   const handleCreationChanson = (e:FormEvent) => {
     e.preventDefault();
     axios
-    .post(`http://localhost:8080/api/chanson`, {
+      .post(`http://localhost:8080/api/chanson`, {
       Titre: TitreCreationChansonElement.current?.value,
       CanalMidi: CanalMidiCreationChansonElement.current?.value,
       PgmMidi: PgmMidiCreationChansonElement.current?.value,
-    })
-    .then((retourChansonCreee)=>{
+      })
+      .then((retourChansonCreee)=>{
       window.location = document.location;       
-    });
+      });
   };
 
   const handleSuppChanson = (chansonASupprimer:Chanson) =>{
     axios
-  .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`)
-  .then((retourChansonSupprimee)=>{
+    .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`)
+    .then((retourChansonSupprimee)=>{
        window.location = document.location;
 
     });
@@ -46,11 +46,10 @@ const PageMedia = () => {
   const handleModifChanson = (chansonAModifier:chansonAModifier, idchansonAModifier: number) =>{
 
     axios
-  .patch(`http://localhost:8080/api/chanson/${idchansonAModifier}`,chansonAModifier
-  )
-  .then((retourChansonModifiee)=>{
+    .patch(`http://localhost:8080/api/chanson/${idchansonAModifier}`, chansonAModifier
+    )
+    .then((retourChansonModifiee)=>{
        window.location = document.location;
-
     }).catch((error)=>
     console.log(error))
   }; 
