@@ -4,14 +4,14 @@ import { Chanson } from "../pages/Page Play";
 // import "./Searchbar.css";
 
 interface SearchBarProps {
-  toutesChansonsAAfficher: Chanson[];
+  affichageChansons: Chanson[];
   parentUseStateSearch: (event: SetStateAction<string>) => void;
   parentUseStateFiltre: (event: SetStateAction<string>) => void;
 }
 
 // Ce composant attend une liste de catégorie à afficher
 const SearchBar = ({
-  toutesChansonsAAfficher,
+  affichageChansons,
   parentUseStateSearch,
   parentUseStateFiltre,
 }: SearchBarProps) => {
@@ -38,7 +38,7 @@ const SearchBar = ({
                   onChange={(e) => handleChansonSelect(e)}
                 >
                   <option value="">Toutes les chansons</option>
-                  {toutesChansonsAAfficher.map((chanson) => {
+                  {affichageChansons.map((chanson) => {
                     return (
                       <option
                         key={chanson.id}

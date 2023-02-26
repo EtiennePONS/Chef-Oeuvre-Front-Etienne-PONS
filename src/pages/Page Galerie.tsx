@@ -38,10 +38,10 @@ const PageGalerie = () => {
     axios
       .post(`http://localhost:8080/api/visuel`, {
         Visuel: TitreCreationVisuelElement.current?.value,
-        CanalMidi: CanalMidiCreationVisuelElement.current?.value,
-        PgmMidi: PgmMidiCreationVisuelElement.current?.value,
+        CanalMidi: chansonChoisiPourCreationOuModificationVisuel?.CanalMidi,
+        PgmMidi: chansonChoisiPourCreationOuModificationVisuel?.PgmMidi,
         NoteMidi: NoteMidiCreationVisuelElement.current?.value,
-        chanson: { id: ChansonCreationVisuelElement.current?.value },
+        chanson: { id: chansonChoisiPourCreationOuModificationVisuel?.id },
       })
       .then((retourVisuelCree) => {
         window.location = document.location;
@@ -60,32 +60,37 @@ const PageGalerie = () => {
     visuelAModifier: visuelAModifier,
     idvisuelAModifier: number
   ) => {
-    console.log(
-      "Info modification",
-      visuelAModifier,
-      "info Id à modifier ",
-      idvisuelAModifier
-    );
-
     axios
       .patch(
         `http://localhost:8080/api/visuel/${idvisuelAModifier}`,
         visuelAModifier
       )
-      .then((retourChansonModifiee) => {})
-      window.location = document.location
+      .then((retourChansonModifiee) => {
+        window.location = document.location
+      });
+      
 
   };
-
+  const handleChansonSelectPourCreationOuModificationVisuel = (e:any) => {
+    const chansonchoisi = e.currentTarget.value;
+    axios
+      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
+      .then((retourChansonChoisi) => {
+        const choixChansonPourCreationVisuel = retourChansonChoisi.data;
+        setChansonChoisiPourCreationOuModificationVisuel(choixChansonPourCreationVisuel)
+        console.log(choixChansonPourCreationVisuel)
+      });
+  }
+  const [chansonChoisiPourCreationOuModificationVisuel, setChansonChoisiPourCreationOuModificationVisuel] = useState<Chanson>();
   const [search, setSearch] = useState<string>("");
   const [chansonsFilter, setChansonsFilter] = useState<string>("");
   const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
   const [affichageVisuels, setAffichageVisuels] = useState<Visuel[]>([]);
   const TitreCreationVisuelElement = useRef<HTMLInputElement>(null);
-  const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
-  const PgmMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
+  // const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
+  // const PgmMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
   const NoteMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
-  const ChansonCreationVisuelElement = useRef<HTMLInputElement>(null);
+  // const ChansonCreationVisuelElement = useRef<HTMLInputElement>(null);
 
   return (
     <div>
@@ -121,12 +126,16 @@ const PageGalerie = () => {
             <div className="modal-body">
               <div className="form-floating mb-3">                
                   <select className="form-select"       id="inputGroupSelect01" 
-                  aria-label="Floating label select example">
+                  aria-label="Floating label select example"
+                  defaultValue=""
+                  onChange={(e) => handleChansonSelectPourCreationOuModificationVisuel(e)}
+                  >
                   <option value="Liste de chansons"></option>{affichageChansons.map((chanson) => {
                     return (
                       <option
                         key={chanson.id}
-                        value={chanson.id}                        
+                        value={chanson.id}
+                                   
                       >
                         {chanson.Titre}
                       </option>
@@ -136,18 +145,9 @@ const PageGalerie = () => {
                 <label htmlFor="floatingInputValue"></label>
                 <label htmlFor="floatingPassword">Chanson</label>
               </div>
-              <div className="form-floating mb-3">
-                <input
-                  type="number"
-                  min="1"
-                  max="16"
-                  className="form-control"
-                  id="floatingPassword"
-                  placeholder=""
-                  ref={ChansonCreationVisuelElement}
-                />
-                <label htmlFor="floatingPassword">Chanson ID</label>
-              </div>
+              <span className="input-group-text mb-3">Canal Midi {chansonChoisiPourCreationOuModificationVisuel?.CanalMidi}</span>
+              <span className="input-group-text mb-3">Programme {chansonChoisiPourCreationOuModificationVisuel?.PgmMidi}</span>
+
               <div className="form-floating mb-3">
                 <input
                   type="text"
@@ -158,30 +158,7 @@ const PageGalerie = () => {
                 />
                 <label htmlFor="floatingPassword">Intitulé</label>
               </div>
-              <div className="form-floating mb-3">
-                <input
-                  type="number"
-                  min="1"
-                  max="16"
-                  className="form-control"
-                  id="floatingPassword"
-                  placeholder="Chanson"
-                  ref={CanalMidiCreationVisuelElement}
-                />
-                <label htmlFor="floatingPassword">Canal Midi (1-16)</label>
-              </div>
-              <div className="form-floating mb-3">
-                <input
-                  type="number"
-                  min="1"
-                  max="128"
-                  className="form-control"
-                  id="floatingPassword"
-                  placeholder="Chanson"
-                  ref={PgmMidiCreationVisuelElement}
-                />
-                <label htmlFor="floatingPassword">Programme Midi (1-128)</label>
-              </div>
+
               <div className="form-floating mb-3">
                 <input
                   type="number"
@@ -216,7 +193,7 @@ const PageGalerie = () => {
         </div>
       </div>
       <SearchBar
-        toutesChansonsAAfficher={affichageChansons}
+        affichageChansons={affichageChansons}
         parentUseStateSearch={setSearch}
         parentUseStateFiltre={setChansonsFilter}
       />
@@ -237,6 +214,8 @@ const PageGalerie = () => {
           return (
             <CarteVisuel
               visuel={visuel}
+              affichageChansons={affichageChansons}
+              parentUseStateFiltre={handleChansonSelectPourCreationOuModificationVisuel}
               demandeSuppressionVisuel={handleSuppVisuel}
               donneesPourModificationVisuel={handleModifVisuel}
               key={visuel.id}

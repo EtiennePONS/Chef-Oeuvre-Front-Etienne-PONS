@@ -149,7 +149,7 @@ const PageMedia = () => {
         </div>
       </div>
       <Searchbar
-        toutesChansonsAAfficher={affichageChansons}
+        affichageChansons={affichageChansons}
         parentUseStateSearch={setSearch}
         parentUseStateFiltre={setChansonsFilter}
       />

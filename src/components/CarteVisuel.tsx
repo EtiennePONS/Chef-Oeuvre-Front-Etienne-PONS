@@ -1,9 +1,12 @@
-import { useRef } from "react";
+import axios from "axios";
+import { SetStateAction, useRef, useState } from "react";
 import { visuelAModifier } from "../pages/Page Galerie";
-import { Visuel } from "../pages/Page Play";
+import { Chanson, Visuel } from "../pages/Page Play";
 
 interface CarteVisuelProps {
   visuel: Visuel;
+  affichageChansons: Chanson[];
+  parentUseStateFiltre: (event: SetStateAction<string>) => void;
   demandeSuppressionVisuel: (visuel: Visuel) => void;
   donneesPourModificationVisuel: (
     visuel: visuelAModifier,
@@ -12,37 +15,54 @@ interface CarteVisuelProps {
 }
 
 const CarteVisuel = ({
-  visuel,
+  visuel, affichageChansons,
+  parentUseStateFiltre,
   demandeSuppressionVisuel,
   donneesPourModificationVisuel,
 }: CarteVisuelProps) => {
+
+    const handleChansonSelectPourCreationOuModificationVisuel = (e:any) => {
+    const chansonchoisi = e.currentTarget.value;
+    axios
+      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
+      .then((retourChansonChoisi) => {
+        const choixChansonPourCreationVisuel = retourChansonChoisi.data;
+        console.log(choixChansonPourCreationVisuel)
+        setChansonChoisiPourCreationOuModificationVisuel(choixChansonPourCreationVisuel)
+
+      });
+  }
+
+
   const handleSuppressionVisuel = () => {
     demandeSuppressionVisuel(visuel);
   };
   const handleModifVisuel = (visuelid: number) => {
     if (
       VisuelModificationVisuelElement.current &&
-      CanalMidiModificationVisuelElement.current &&
-      PgmMidiModificationVisuelElement.current &&
-      NoteMidiModificationVisuelElement.current
-       && ChansonIdModificationVisuelElement.current
+      NoteMidiModificationVisuelElement.current && chansonChoisiPourCreationOuModificationVisuel    
     ) {
       const visuelAModifier: visuelAModifier = {
-        Visuel: VisuelModificationVisuelElement.current.value,
-        CanalMidi: Number(CanalMidiModificationVisuelElement.current.value),
-        PgmMidi: Number(PgmMidiModificationVisuelElement.current.value),
+        Visuel: (VisuelModificationVisuelElement.current.value),
+        CanalMidi: Number(chansonChoisiPourCreationOuModificationVisuel.CanalMidi),
+        PgmMidi: Number(chansonChoisiPourCreationOuModificationVisuel.PgmMidi),
         NoteMidi: Number(NoteMidiModificationVisuelElement.current.value),
-        chanson:{id: Number (ChansonIdModificationVisuelElement.current.value)}
+        chanson:{id: Number (chansonChoisiPourCreationOuModificationVisuel.id)}
       };
       donneesPourModificationVisuel(visuelAModifier, visuelid);
     }
   };
 
+  
+
+
+  const [chansonChoisiPourCreationOuModificationVisuel, setChansonChoisiPourCreationOuModificationVisuel] = useState<Chanson>();  
   const VisuelModificationVisuelElement = useRef<HTMLInputElement>(null);
-  const CanalMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
-  const PgmMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const CanalMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const PgmMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
   const NoteMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
-  const ChansonIdModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const ChansonIdModificationVisuelElement = useRef<HTMLInputElement>(null);
+    
 
   return (
     <div>
@@ -55,7 +75,7 @@ const CarteVisuel = ({
           <h5 className="card-title">{visuel.chanson.Titre}</h5>
           <h5 className="card-title">{visuel.Visuel}</h5>
           <p className="card-text">Ch.{visuel.chanson.CanalMidi}</p>
-          <p className="card-text">Pgm{visuel.chanson.PgmMidi}</p>
+          <p className="card-text">Pgm {visuel.chanson.PgmMidi}</p>
           <p className="card-text">Note {visuel.NoteMidi}</p>
         </div>
       </div>
@@ -80,7 +100,7 @@ const CarteVisuel = ({
               ></button>
             </div>
             <div className="modal-body">
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label >ChansonID</label>
                 <input
                   type="number"
@@ -89,7 +109,7 @@ const CarteVisuel = ({
                   placeholder={visuel.chanson.Titre}
                   ref={ChansonIdModificationVisuelElement}
                 />
-              </div>
+              </div> */}
               <div className="mb-3">
                 <label>Titre du Visuel</label>
                 <input
@@ -100,26 +120,49 @@ const CarteVisuel = ({
                 />
               </div>
               <div className="mb-3">
-                <label>Canal Midi (1-16)</label>
-                <input
+                <select className="form-select"       id="inputGroupSelect01" 
+                  aria-label="Floating label select example"
+                  defaultValue=""
+                  onChange={(e) => handleChansonSelectPourCreationOuModificationVisuel(e)}
+                  >
+                  <option value="Liste de chansons"></option>{affichageChansons.map((chanson) => {
+                    return (
+                      <option
+                        key={chanson.id}
+                        value={chanson.id}
+                                   
+                      >
+                        {chanson.Titre}
+                      </option>
+                    );
+                  })}
+                </select>
+              </div>
+              <div className="mb-3">
+                <span className="input-group-text mb-3">Canal Midi {chansonChoisiPourCreationOuModificationVisuel?.CanalMidi}</span>
+              </div>
+              <div className="mb-3">
+                <span className="input-group-text mb-3">Programme {chansonChoisiPourCreationOuModificationVisuel?.PgmMidi}</span>
+                {/* <label>Canal Midi (1-16)</label> */}
+                {/* <input
                   type="number"
                   min="1"
                   max="16"
                   className="form-control"
                   placeholder={visuel.chanson.CanalMidi.toString()}
                   ref={CanalMidiModificationVisuelElement}
-                />
+                /> */}
               </div>
               <div className="mb-3">
-                <label>Programme Midi (1-128)</label>
-                <input
+                 {/* <label>Programme Midi (1-128)</label> */}
+                {/* <input
                   type="number"
                   min="1"
                   max="128"
                   className="form-control"
                   placeholder={visuel.chanson.PgmMidi.toString()}
                   ref={PgmMidiModificationVisuelElement}
-                />
+                /> */}
               </div>
               <div className="mb-3">
                 <label>Note Midi (1-128)</label>
@@ -161,7 +204,7 @@ const CarteVisuel = ({
           </div>
         </div>
       </div>
-    </div>
+      </div>
   );
 };
 export default CarteVisuel;
