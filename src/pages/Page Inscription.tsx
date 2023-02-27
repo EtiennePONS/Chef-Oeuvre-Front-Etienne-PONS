@@ -2,6 +2,7 @@ import axios from "axios";
 import { FormEvent, useRef } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 
+// Composant principal
 const PageInscription = () => {
   const FirstnameElement = useRef<HTMLInputElement>(null);
   const NameElement = useRef<HTMLInputElement>(null);

@@ -1,46 +1,54 @@
 import { useRef } from "react";
-import { chansonAModifier } from "../pages/Page Media";
-import { Chanson } from "../pages/Page Play";
+import { Chanson, ChansonAModifier } from "../pages/Page Home";
 
 interface CarteChansonProps {
   chanson: Chanson;
   demandeSuppressionChanson: (chanson: Chanson) => void;
-  donneesPourModificationChanson: (chanson:chansonAModifier, chansonid:number) => void;
+  donneesPourModificationChanson: (
+    chanson: ChansonAModifier,
+    chansonid: number
+  ) => void;
 }
 
+// Composant principal
 const CarteChanson = ({
-  chanson, demandeSuppressionChanson, donneesPourModificationChanson
-}:
-CarteChansonProps) => {
-  const handleSuppressionChanson = () =>{demandeSuppressionChanson(chanson)
-  }
+  chanson,
+  demandeSuppressionChanson,
+  donneesPourModificationChanson,
+}: CarteChansonProps) => {
+  const handleSuppressionChanson = () => {
+    demandeSuppressionChanson(chanson);
+  };
   const handleModifChanson = (chansonid: number) => {
-    if (TitreModificationChansonElement.current && CanalMidiModificationChansonElement.current && PgmMidiModificationChansonElement.current) {      
-      const chansonAModifier: chansonAModifier = {
+    if (
+      TitreModificationChansonElement.current &&
+      CanalMidiModificationChansonElement.current &&
+      PgmMidiModificationChansonElement.current
+    ) {
+      const chansonAModifier: ChansonAModifier = {
         Titre: TitreModificationChansonElement.current.value,
         CanalMidi: Number(CanalMidiModificationChansonElement.current.value),
-        PgmMidi: Number(PgmMidiModificationChansonElement.current.value),        
-      }
+        PgmMidi: Number(PgmMidiModificationChansonElement.current.value),
+      };
       donneesPourModificationChanson(chansonAModifier, chansonid);
     }
-  }
-  
+  };
 
   const TitreModificationChansonElement = useRef<HTMLInputElement>(null);
   const CanalMidiModificationChansonElement = useRef<HTMLInputElement>(null);
   const PgmMidiModificationChansonElement = useRef<HTMLInputElement>(null);
-  
+
   return (
     <div>
       <div
-      className="btn card text-center mb-3 shadow"
-      data-bs-toggle="modal"
-      data-bs-target={`#${chanson.id.toString()}`}
+        className="btn card text-center mb-3 shadow"
+        data-bs-toggle="modal"
+        data-bs-target={`#${chanson.id.toString()}`}
       >
         <div className="card-body">
           <h5 className="card-title">{chanson.Titre}</h5>
           <p className="card-text">Ch.{chanson.CanalMidi}</p>
-         <p className="card-text">Pgm {chanson.PgmMidi}</p>
+          <p className="card-text">Pgm {chanson.PgmMidi}</p>
         </div>
       </div>
       <div
@@ -61,21 +69,20 @@ CarteChansonProps) => {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              >                
-              </button>
+              ></button>
             </div>
             <div className="modal-body">
               <div className="mb-3">
-                <label >Titre de la chanson</label>
+                <label>Titre de la chanson</label>
                 <input
                   type="text"
                   className="form-control"
                   placeholder={chanson.Titre}
                   ref={TitreModificationChansonElement}
-                /> 
+                />
               </div>
               <div className="mb-3">
-                <label >Canal Midi (1-16)</label>
+                <label>Canal Midi (1-16)</label>
                 <input
                   type="number"
                   min="1"
@@ -86,7 +93,7 @@ CarteChansonProps) => {
                 />
               </div>
               <div className="mb-3">
-                <label >Programme Midi (1-128)</label>
+                <label>Programme Midi (1-128)</label>
                 <input
                   type="number"
                   min="1"
@@ -98,22 +105,32 @@ CarteChansonProps) => {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-danger"data-bs-dismiss="modal" onClick={handleSuppressionChanson}>
+              <button
+                type="button"
+                className="btn btn-danger"
+                data-bs-dismiss="modal"
+                onClick={handleSuppressionChanson}
+              >
                 Supprimer la Chanson
               </button>
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-bs-dismiss="modal"            
+                data-bs-dismiss="modal"
               >
                 Annuler
               </button>
-              <button type="button" className="btn btn-primary"data-bs-dismiss="modal" onClick={()=>handleModifChanson(chanson.id)}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                data-bs-dismiss="modal"
+                onClick={() => handleModifChanson(chanson.id)}
+              >
                 Enregistrer les modifications
               </button>
             </div>
           </div>
-        </div> 
+        </div>
       </div>
     </div>
   );

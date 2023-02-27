@@ -2,15 +2,11 @@ import axios from "axios";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import CarteChanson from "../components/CarteChanson";
 import Searchbar from "../components/SearchBar";
-import { Chanson } from "./Page Play";
+import { Chanson, ChansonAModifier } from "./Page Home";
 
-export interface chansonAModifier {
-  Titre: string;
-  CanalMidi: number;
-  PgmMidi: number;
-}
-
+// Composant principal
 const PageMedia = () => {
+  // Appel au chargement de la page
   useEffect(() => {
     axios
       // recuperation des données (toutes les chansons)
@@ -21,46 +17,53 @@ const PageMedia = () => {
       });
   }, []);
 
-  const handleCreationChanson = (e:FormEvent) => {
+  // Fonction pour création d'une chanson
+  const handleCreationChanson = (e: FormEvent) => {
     e.preventDefault();
     axios
       .post(`http://localhost:8080/api/chanson`, {
-      Titre: TitreCreationChansonElement.current?.value,
-      CanalMidi: CanalMidiCreationChansonElement.current?.value,
-      PgmMidi: PgmMidiCreationChansonElement.current?.value,
+        Titre: TitreCreationChansonElement.current?.value,
+        CanalMidi: CanalMidiCreationChansonElement.current?.value,
+        PgmMidi: PgmMidiCreationChansonElement.current?.value,
       })
-      .then((retourChansonCreee)=>{
-      window.location = document.location;       
+      .then((retourChansonCreee) => {
+        window.location = document.location;
       });
   };
 
-  const handleSuppChanson = (chansonASupprimer:Chanson) =>{
+  // Fonction pour supprimer une chanson
+  const handleSuppChanson = (chansonASupprimer: Chanson) => {
     axios
-    .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`)
-    .then((retourChansonSupprimee)=>{
-       window.location = document.location;
-
-    });
+      .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`)
+      .then((retourChansonSupprimee) => {
+        window.location = document.location;
+      });
   };
 
-  const handleModifChanson = (chansonAModifier:chansonAModifier, idchansonAModifier: number) =>{
-
+  // Fonction pour modifier une chanson
+  const handleModifChanson = (
+    chansonAModifier: ChansonAModifier,
+    idchansonAModifier: number
+  ) => {
     axios
-    .patch(`http://localhost:8080/api/chanson/${idchansonAModifier}`, chansonAModifier
-    )
-    .then((retourChansonModifiee)=>{
-       window.location = document.location;
-    }).catch((error)=>
-    console.log(error))
-  }; 
+      .patch(
+        `http://localhost:8080/api/chanson/${idchansonAModifier}`,
+        chansonAModifier
+      )
+      .then((retourChansonModifiee) => {
+        window.location = document.location;
+      })
+      .catch((error) => console.log(error));
+  };
 
-
-
+  // affichage dynamique des chansons via useState
   const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
-  // recherche via SearchBar//
+  // recherche dynamique "SearchBar" via useState
   const [search, setSearch] = useState<string>("");
-  // recherche via filtre categories dropdown//
+  // recherche dynamique via filtre "dropdown" via useState
   const [chansonsFilter, setChansonsFilter] = useState<string>("");
+
+  // entrées des inputs via useRef
   const TitreCreationChansonElement = useRef<HTMLInputElement>(null);
   const CanalMidiCreationChansonElement = useRef<HTMLInputElement>(null);
   const PgmMidiCreationChansonElement = useRef<HTMLInputElement>(null);
@@ -94,8 +97,7 @@ const PageMedia = () => {
                 className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
-              >                
-              </button>
+              ></button>
             </div>
             <div className="modal-body">
               <div className="form-floating mb-3">
@@ -137,11 +139,16 @@ const PageMedia = () => {
               <button
                 type="button"
                 className="btn btn-secondary"
-                data-bs-dismiss="modal"            
+                data-bs-dismiss="modal"
               >
                 Annuler
               </button>
-              <button type="button" className="btn btn-primary" onClick={handleCreationChanson} data-bs-dismiss="modal">
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleCreationChanson}
+                data-bs-dismiss="modal"
+              >
                 Creer la Chanson
               </button>
             </div>
@@ -168,12 +175,12 @@ const PageMedia = () => {
         .map((chanson) => {
           return (
             // <div >
-              <CarteChanson
-                chanson={chanson}
-                demandeSuppressionChanson={handleSuppChanson}
-                donneesPourModificationChanson={handleModifChanson} 
-                key={chanson.id}
-               />          
+            <CarteChanson
+              chanson={chanson}
+              demandeSuppressionChanson={handleSuppChanson}
+              donneesPourModificationChanson={handleModifChanson}
+              key={chanson.id}
+            />
             // </div>
           );
         })}

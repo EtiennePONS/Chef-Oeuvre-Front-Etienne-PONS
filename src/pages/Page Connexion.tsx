@@ -8,7 +8,7 @@ interface ConnexionProps {
     React.SetStateAction<MusicienUtilisateur | undefined>
   >;
 }
-
+// Composant principal
 const PageConnexion = ({ PropsUtilisateurConnecté }: ConnexionProps) => {
   const EmailElement = useRef<HTMLInputElement>(null);
   const PasswordElement = useRef<HTMLInputElement>(null);

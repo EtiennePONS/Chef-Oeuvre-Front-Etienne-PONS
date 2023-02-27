@@ -1,7 +1,6 @@
 import axios from "axios";
 import { SetStateAction, useRef, useState } from "react";
-import { visuelAModifier } from "../pages/Page Galerie";
-import { Chanson, Visuel } from "../pages/Page Play";
+import { Chanson, Visuel, VisuelAModifier } from "../pages/Page Home";
 
 interface CarteVisuelProps {
   visuel: Visuel;
@@ -9,30 +8,31 @@ interface CarteVisuelProps {
   parentUseStateFiltre: (event: SetStateAction<string>) => void;
   demandeSuppressionVisuel: (visuel: Visuel) => void;
   donneesPourModificationVisuel: (
-    visuel: visuelAModifier,
+    visuel: VisuelAModifier,
     visuelid: number
   ) => void;
 }
 
+// Composant principal
 const CarteVisuel = ({
-  visuel, affichageChansons,
+  visuel,
+  affichageChansons,
   parentUseStateFiltre,
   demandeSuppressionVisuel,
   donneesPourModificationVisuel,
 }: CarteVisuelProps) => {
-
-    const handleChansonSelectPourCreationOuModificationVisuel = (e:any) => {
+  const handleChansonSelectPourCreationOuModificationVisuel = (e: any) => {
     const chansonchoisi = e.currentTarget.value;
     axios
       .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
       .then((retourChansonChoisi) => {
         const choixChansonPourCreationVisuel = retourChansonChoisi.data;
-        console.log(choixChansonPourCreationVisuel)
-        setChansonChoisiPourCreationOuModificationVisuel(choixChansonPourCreationVisuel)
-
+        console.log(choixChansonPourCreationVisuel);
+        setChansonChoisiPourCreationOuModificationVisuel(
+          choixChansonPourCreationVisuel
+        );
       });
-  }
-
+  };
 
   const handleSuppressionVisuel = () => {
     demandeSuppressionVisuel(visuel);
@@ -40,29 +40,33 @@ const CarteVisuel = ({
   const handleModifVisuel = (visuelid: number) => {
     if (
       VisuelModificationVisuelElement.current &&
-      NoteMidiModificationVisuelElement.current && chansonChoisiPourCreationOuModificationVisuel    
+      NoteMidiModificationVisuelElement.current &&
+      chansonChoisiPourCreationOuModificationVisuel
     ) {
-      const visuelAModifier: visuelAModifier = {
-        Visuel: (VisuelModificationVisuelElement.current.value),
-        CanalMidi: Number(chansonChoisiPourCreationOuModificationVisuel.CanalMidi),
+      const visuelAModifier: VisuelAModifier = {
+        Visuel: VisuelModificationVisuelElement.current.value,
+        CanalMidi: Number(
+          chansonChoisiPourCreationOuModificationVisuel.CanalMidi
+        ),
         PgmMidi: Number(chansonChoisiPourCreationOuModificationVisuel.PgmMidi),
         NoteMidi: Number(NoteMidiModificationVisuelElement.current.value),
-        chanson:{id: Number (chansonChoisiPourCreationOuModificationVisuel.id)}
+        chanson: {
+          id: Number(chansonChoisiPourCreationOuModificationVisuel.id),
+        },
       };
       donneesPourModificationVisuel(visuelAModifier, visuelid);
     }
   };
 
-  
-
-
-  const [chansonChoisiPourCreationOuModificationVisuel, setChansonChoisiPourCreationOuModificationVisuel] = useState<Chanson>();  
+  const [
+    chansonChoisiPourCreationOuModificationVisuel,
+    setChansonChoisiPourCreationOuModificationVisuel,
+  ] = useState<Chanson>();
   const VisuelModificationVisuelElement = useRef<HTMLInputElement>(null);
   // const CanalMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
   // const PgmMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
   const NoteMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
   // const ChansonIdModificationVisuelElement = useRef<HTMLInputElement>(null);
-    
 
   return (
     <div>
@@ -120,18 +124,19 @@ const CarteVisuel = ({
                 />
               </div>
               <div className="mb-3">
-                <select className="form-select"       id="inputGroupSelect01" 
+                <select
+                  className="form-select"
+                  id="inputGroupSelect01"
                   aria-label="Floating label select example"
                   defaultValue=""
-                  onChange={(e) => handleChansonSelectPourCreationOuModificationVisuel(e)}
-                  >
-                  <option value="Liste de chansons"></option>{affichageChansons.map((chanson) => {
+                  onChange={(e) =>
+                    handleChansonSelectPourCreationOuModificationVisuel(e)
+                  }
+                >
+                  <option value="Liste de chansons"></option>
+                  {affichageChansons.map((chanson) => {
                     return (
-                      <option
-                        key={chanson.id}
-                        value={chanson.id}
-                                   
-                      >
+                      <option key={chanson.id} value={chanson.id}>
                         {chanson.Titre}
                       </option>
                     );
@@ -139,10 +144,16 @@ const CarteVisuel = ({
                 </select>
               </div>
               <div className="mb-3">
-                <span className="input-group-text mb-3">Canal Midi {chansonChoisiPourCreationOuModificationVisuel?.CanalMidi}</span>
+                <span className="input-group-text mb-3">
+                  Canal Midi{" "}
+                  {chansonChoisiPourCreationOuModificationVisuel?.CanalMidi}
+                </span>
               </div>
               <div className="mb-3">
-                <span className="input-group-text mb-3">Programme {chansonChoisiPourCreationOuModificationVisuel?.PgmMidi}</span>
+                <span className="input-group-text mb-3">
+                  Programme{" "}
+                  {chansonChoisiPourCreationOuModificationVisuel?.PgmMidi}
+                </span>
                 {/* <label>Canal Midi (1-16)</label> */}
                 {/* <input
                   type="number"
@@ -154,7 +165,7 @@ const CarteVisuel = ({
                 /> */}
               </div>
               <div className="mb-3">
-                 {/* <label>Programme Midi (1-128)</label> */}
+                {/* <label>Programme Midi (1-128)</label> */}
                 {/* <input
                   type="number"
                   min="1"
@@ -204,7 +215,7 @@ const CarteVisuel = ({
           </div>
         </div>
       </div>
-      </div>
+    </div>
   );
 };
 export default CarteVisuel;

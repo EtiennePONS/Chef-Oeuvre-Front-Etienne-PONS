@@ -2,19 +2,11 @@ import axios from "axios";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import CarteVisuel from "../components/CarteVisuel";
 import SearchBar from "../components/SearchBar";
-import { Chanson, Visuel } from "./Page Play";
+import { Chanson, Visuel, VisuelAModifier } from "./Page Home";
 
-export interface visuelAModifier {
-  Visuel: String;
-  CanalMidi: Number;
-  PgmMidi: Number;
-  NoteMidi: Number;
-  chanson:{
-  id: Number
-  }
-}
-
+// Composant principal
 const PageGalerie = () => {
+  // Appel au chargement de la page
   useEffect(() => {
     axios
       // recuperation des données (tout les Visuels)
@@ -33,6 +25,7 @@ const PageGalerie = () => {
       });
   }, []);
 
+  // Fonction pour création d'un visuel
   const handleCreationVisuel = (e: FormEvent) => {
     e.preventDefault();
     axios
@@ -48,6 +41,7 @@ const PageGalerie = () => {
       });
   };
 
+  // Fonction pour supprimer un visuel
   const handleSuppVisuel = (visuelASupprimer: Visuel) => {
     axios
       .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`)
@@ -56,8 +50,9 @@ const PageGalerie = () => {
       });
   };
 
+  // Fonction pour modifier un visuel
   const handleModifVisuel = (
-    visuelAModifier: visuelAModifier,
+    visuelAModifier: VisuelAModifier,
     idvisuelAModifier: number
   ) => {
     axios
@@ -66,26 +61,38 @@ const PageGalerie = () => {
         visuelAModifier
       )
       .then((retourChansonModifiee) => {
-        window.location = document.location
+        window.location = document.location;
       });
-      
-
   };
-  const handleChansonSelectPourCreationOuModificationVisuel = (e:any) => {
+
+  // Fonction qui permet de selectionner une chanson pour création ou modification d'un visuel
+  const handleChansonSelectPourCreationOuModificationVisuel = (e: any) => {
     const chansonchoisi = e.currentTarget.value;
     axios
       .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
       .then((retourChansonChoisi) => {
         const choixChansonPourCreationVisuel = retourChansonChoisi.data;
-        setChansonChoisiPourCreationOuModificationVisuel(choixChansonPourCreationVisuel)
-        console.log(choixChansonPourCreationVisuel)
+        setChansonChoisiPourCreationOuModificationVisuel(
+          choixChansonPourCreationVisuel
+        );
+        console.log(choixChansonPourCreationVisuel);
       });
-  }
-  const [chansonChoisiPourCreationOuModificationVisuel, setChansonChoisiPourCreationOuModificationVisuel] = useState<Chanson>();
+  };
+  // configuration dynamique via choix d'une chanson pour création ou modification d'un visuel via useState
+  const [
+    chansonChoisiPourCreationOuModificationVisuel,
+    setChansonChoisiPourCreationOuModificationVisuel,
+  ] = useState<Chanson>();
+  // recherche dynamique "SearchBar" via useState
   const [search, setSearch] = useState<string>("");
+  // recherche dynamique via filtre "dropdown" via useState
   const [chansonsFilter, setChansonsFilter] = useState<string>("");
+  // affichage dynamique des chansons via useState
   const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
+  // affichage dynamique des visuels via useState
   const [affichageVisuels, setAffichageVisuels] = useState<Visuel[]>([]);
+
+  // entrées des inputs via useRef
   const TitreCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const PgmMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
@@ -124,29 +131,36 @@ const PageGalerie = () => {
               ></button>
             </div>
             <div className="modal-body">
-              <div className="form-floating mb-3">                
-                  <select className="form-select"       id="inputGroupSelect01" 
+              <div className="form-floating mb-3">
+                <select
+                  className="form-select"
+                  id="inputGroupSelect01"
                   aria-label="Floating label select example"
                   defaultValue=""
-                  onChange={(e) => handleChansonSelectPourCreationOuModificationVisuel(e)}
-                  >
-                  <option value="Liste de chansons"></option>{affichageChansons.map((chanson) => {
+                  onChange={(e) =>
+                    handleChansonSelectPourCreationOuModificationVisuel(e)
+                  }
+                >
+                  <option value="Liste de chansons"></option>
+                  {affichageChansons.map((chanson) => {
                     return (
-                      <option
-                        key={chanson.id}
-                        value={chanson.id}
-                                   
-                      >
+                      <option key={chanson.id} value={chanson.id}>
                         {chanson.Titre}
                       </option>
                     );
                   })}
-                  </select>
+                </select>
                 <label htmlFor="floatingInputValue"></label>
                 <label htmlFor="floatingPassword">Chanson</label>
               </div>
-              <span className="input-group-text mb-3">Canal Midi {chansonChoisiPourCreationOuModificationVisuel?.CanalMidi}</span>
-              <span className="input-group-text mb-3">Programme {chansonChoisiPourCreationOuModificationVisuel?.PgmMidi}</span>
+              <span className="input-group-text mb-3">
+                Canal Midi{" "}
+                {chansonChoisiPourCreationOuModificationVisuel?.CanalMidi}
+              </span>
+              <span className="input-group-text mb-3">
+                Programme{" "}
+                {chansonChoisiPourCreationOuModificationVisuel?.PgmMidi}
+              </span>
 
               <div className="form-floating mb-3">
                 <input
@@ -215,7 +229,9 @@ const PageGalerie = () => {
             <CarteVisuel
               visuel={visuel}
               affichageChansons={affichageChansons}
-              parentUseStateFiltre={handleChansonSelectPourCreationOuModificationVisuel}
+              parentUseStateFiltre={
+                handleChansonSelectPourCreationOuModificationVisuel
+              }
               demandeSuppressionVisuel={handleSuppVisuel}
               donneesPourModificationVisuel={handleModifVisuel}
               key={visuel.id}
