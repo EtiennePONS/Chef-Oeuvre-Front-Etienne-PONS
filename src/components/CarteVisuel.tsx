@@ -146,6 +146,10 @@ const CarteVisuel = ({
                 />
               </div>
               <div className="mb-3">
+                <input className="form-control" type="file" id="formFile" />
+              </div>
+              <div className="mb-3">
+                <label>Chanson</label>
                 <select
                   className="form-select"
                   id="inputGroupSelect01"

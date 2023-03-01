@@ -181,6 +181,9 @@ const PageVisuels = () => {
                 <label htmlFor="floatingInputValue"></label>
                 <label htmlFor="floatingPassword">Chanson</label>
               </div>
+              <div className="mb-3">
+                <input className="form-control" type="file" id="formFile" />
+              </div>
               <span className="input-group-text mb-3">
                 Canal Midi{" "}
                 {chansonChoisiPourCreationOuModificationVisuel?.CanalMidi}
@@ -222,18 +225,6 @@ const PageVisuels = () => {
                 <label htmlFor="floatingInputValue"></label>
                 <label htmlFor="floatingPassword">Notes-Midi</label>
               </div>
-              {/* <div className="form-floating mb-3">
-                <input
-                  type="number"
-                  min="1"
-                  max="128"
-                  className="form-control"
-                  id="floatingPassword"
-                  placeholder="Chanson"
-                  ref={NoteMidiCreationVisuelElement}
-                />
-                <label htmlFor="floatingPassword">Note Midi (1-128)</label>
-              </div> */}
             </div>
             <div className="modal-footer">
               <button
