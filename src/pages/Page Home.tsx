@@ -1,3 +1,7 @@
+export interface NoteMidi {
+  id: number;
+  NoteString: string;
+}
 export interface Chanson {
   id: number;
   Titre: string;
@@ -14,6 +18,10 @@ export interface Visuel {
     CanalMidi: number;
     PgmMidi: number;
   };
+  noteMidi: {
+    id: number;
+    NoteString: string;
+  };
 }
 export interface ChansonAModifier {
   Titre: string;
@@ -27,6 +35,9 @@ export interface VisuelAModifier {
   NoteMidi: Number;
   chanson: {
     id: Number;
+  };
+  noteMidi: {
+    id: number;
   };
 }
 // Composant principal

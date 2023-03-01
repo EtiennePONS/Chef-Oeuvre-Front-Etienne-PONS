@@ -2,10 +2,10 @@ import axios from "axios";
 import { FormEvent, useEffect, useRef, useState } from "react";
 import CarteVisuel from "../components/CarteVisuel";
 import SearchBar from "../components/SearchBar";
-import { Chanson, Visuel, VisuelAModifier } from "./Page Home";
+import { Chanson, NoteMidi, Visuel, VisuelAModifier } from "./Page Home";
 
 // Composant principal
-const PageGalerie = () => {
+const PageVisuels = () => {
   // Appel au chargement de la page
   useEffect(() => {
     axios
@@ -23,6 +23,13 @@ const PageGalerie = () => {
         const listeCompleteChansons = retourReponseChansons.data;
         setAffichageChansons(listeCompleteChansons);
       });
+    axios
+      // recuperation des données (toutes les notes)
+      .get("http://localhost:8080/api/note-midi")
+      .then((retourReponseNotes) => {
+        const listeCompleteNotes = retourReponseNotes.data;
+        setAffichageNotes(listeCompleteNotes);
+      });
   }, []);
 
   // Fonction pour création d'un visuel
@@ -33,8 +40,9 @@ const PageGalerie = () => {
         Visuel: TitreCreationVisuelElement.current?.value,
         CanalMidi: chansonChoisiPourCreationOuModificationVisuel?.CanalMidi,
         PgmMidi: chansonChoisiPourCreationOuModificationVisuel?.PgmMidi,
-        NoteMidi: NoteMidiCreationVisuelElement.current?.value,
+        NoteMidi: noteMidiChoisiPourCreationOuModificationVisuel?.id,
         chanson: { id: chansonChoisiPourCreationOuModificationVisuel?.id },
+        noteMidi: { id: noteMidiChoisiPourCreationOuModificationVisuel?.id },
       })
       .then((retourVisuelCree) => {
         window.location = document.location;
@@ -78,11 +86,29 @@ const PageGalerie = () => {
         console.log(choixChansonPourCreationVisuel);
       });
   };
+  const handleNoteMidiSelectPourCreationOuModificationVisuel = (e: any) => {
+    const noteMidichoisi = e.currentTarget.value;
+    axios
+      .get(`http://localhost:8080/api/note-midi/${noteMidichoisi}`)
+      .then((retourNoteMidiChoisi) => {
+        const choixNoteMidiPourCreationVisuel = retourNoteMidiChoisi.data;
+        setNoteMidiChoisiPourCreationOuModificationVisuel(
+          choixNoteMidiPourCreationVisuel
+        );
+        console.log(choixNoteMidiPourCreationVisuel);
+      });
+  };
   // configuration dynamique via choix d'une chanson pour création ou modification d'un visuel via useState
   const [
     chansonChoisiPourCreationOuModificationVisuel,
     setChansonChoisiPourCreationOuModificationVisuel,
   ] = useState<Chanson>();
+
+  const [
+    noteMidiChoisiPourCreationOuModificationVisuel,
+    setNoteMidiChoisiPourCreationOuModificationVisuel,
+  ] = useState<NoteMidi>();
+
   // recherche dynamique "SearchBar" via useState
   const [search, setSearch] = useState<string>("");
   // recherche dynamique via filtre "dropdown" via useState
@@ -91,12 +117,14 @@ const PageGalerie = () => {
   const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
   // affichage dynamique des visuels via useState
   const [affichageVisuels, setAffichageVisuels] = useState<Visuel[]>([]);
+  // affichage dynamique des chansons via useState
+  const [affichageNotes, setAffichageNotes] = useState<NoteMidi[]>([]);
 
   // entrées des inputs via useRef
   const TitreCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const PgmMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
-  const NoteMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
+  // const NoteMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const ChansonCreationVisuelElement = useRef<HTMLInputElement>(null);
 
   return (
@@ -172,8 +200,29 @@ const PageGalerie = () => {
                 />
                 <label htmlFor="floatingPassword">Intitulé</label>
               </div>
-
               <div className="form-floating mb-3">
+                <select
+                  className="form-select"
+                  id="inputGroupSelect01"
+                  aria-label="Floating label select example"
+                  defaultValue=""
+                  onChange={(e) =>
+                    handleNoteMidiSelectPourCreationOuModificationVisuel(e)
+                  }
+                >
+                  <option value="Liste de chansons"></option>
+                  {affichageNotes.map((NoteMidi) => {
+                    return (
+                      <option key={NoteMidi.id} value={NoteMidi.id}>
+                        {NoteMidi.NoteString}
+                      </option>
+                    );
+                  })}
+                </select>
+                <label htmlFor="floatingInputValue"></label>
+                <label htmlFor="floatingPassword">Notes-Midi</label>
+              </div>
+              {/* <div className="form-floating mb-3">
                 <input
                   type="number"
                   min="1"
@@ -184,7 +233,7 @@ const PageGalerie = () => {
                   ref={NoteMidiCreationVisuelElement}
                 />
                 <label htmlFor="floatingPassword">Note Midi (1-128)</label>
-              </div>
+              </div> */}
             </div>
             <div className="modal-footer">
               <button
@@ -229,6 +278,7 @@ const PageGalerie = () => {
             <CarteVisuel
               visuel={visuel}
               affichageChansons={affichageChansons}
+              affichageNotes={affichageNotes}
               parentUseStateFiltre={
                 handleChansonSelectPourCreationOuModificationVisuel
               }
@@ -241,4 +291,4 @@ const PageGalerie = () => {
     </div>
   );
 };
-export default PageGalerie;
+export default PageVisuels;

@@ -1,10 +1,11 @@
 import axios from "axios";
 import { SetStateAction, useRef, useState } from "react";
-import { Chanson, Visuel, VisuelAModifier } from "../pages/Page Home";
+import { Chanson, NoteMidi, Visuel, VisuelAModifier } from "../pages/Page Home";
 
 interface CarteVisuelProps {
   visuel: Visuel;
   affichageChansons: Chanson[];
+  affichageNotes: NoteMidi[];
   parentUseStateFiltre: (event: SetStateAction<string>) => void;
   demandeSuppressionVisuel: (visuel: Visuel) => void;
   donneesPourModificationVisuel: (
@@ -17,7 +18,7 @@ interface CarteVisuelProps {
 const CarteVisuel = ({
   visuel,
   affichageChansons,
-  parentUseStateFiltre,
+  affichageNotes,
   demandeSuppressionVisuel,
   donneesPourModificationVisuel,
 }: CarteVisuelProps) => {
@@ -27,9 +28,20 @@ const CarteVisuel = ({
       .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
       .then((retourChansonChoisi) => {
         const choixChansonPourCreationVisuel = retourChansonChoisi.data;
-        console.log(choixChansonPourCreationVisuel);
         setChansonChoisiPourCreationOuModificationVisuel(
           choixChansonPourCreationVisuel
+        );
+      });
+  };
+
+  const handleNoteMidiSelectPourCreationOuModificationVisuel = (e: any) => {
+    const noteMidichoisi = e.currentTarget.value;
+    axios
+      .get(`http://localhost:8080/api/note-midi/${noteMidichoisi}`)
+      .then((retourNoteMidiChoisi) => {
+        const choixNoteMidiPourCreationVisuel = retourNoteMidiChoisi.data;
+        setNoteMidiChoisiPourCreationOuModificationVisuel(
+          choixNoteMidiPourCreationVisuel
         );
       });
   };
@@ -40,8 +52,8 @@ const CarteVisuel = ({
   const handleModifVisuel = (visuelid: number) => {
     if (
       VisuelModificationVisuelElement.current &&
-      NoteMidiModificationVisuelElement.current &&
-      chansonChoisiPourCreationOuModificationVisuel
+      chansonChoisiPourCreationOuModificationVisuel &&
+      noteMidiChoisiPourCreationOuModificationVisuel
     ) {
       const visuelAModifier: VisuelAModifier = {
         Visuel: VisuelModificationVisuelElement.current.value,
@@ -49,9 +61,12 @@ const CarteVisuel = ({
           chansonChoisiPourCreationOuModificationVisuel.CanalMidi
         ),
         PgmMidi: Number(chansonChoisiPourCreationOuModificationVisuel.PgmMidi),
-        NoteMidi: Number(NoteMidiModificationVisuelElement.current.value),
+        NoteMidi: Number(noteMidiChoisiPourCreationOuModificationVisuel.id),
         chanson: {
           id: Number(chansonChoisiPourCreationOuModificationVisuel.id),
+        },
+        noteMidi: {
+          id: Number(noteMidiChoisiPourCreationOuModificationVisuel.id),
         },
       };
       donneesPourModificationVisuel(visuelAModifier, visuelid);
@@ -62,10 +77,15 @@ const CarteVisuel = ({
     chansonChoisiPourCreationOuModificationVisuel,
     setChansonChoisiPourCreationOuModificationVisuel,
   ] = useState<Chanson>();
+  const [
+    noteMidiChoisiPourCreationOuModificationVisuel,
+    setNoteMidiChoisiPourCreationOuModificationVisuel,
+  ] = useState<NoteMidi>();
+
   const VisuelModificationVisuelElement = useRef<HTMLInputElement>(null);
   // const CanalMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
   // const PgmMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
-  const NoteMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const NoteMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
   // const ChansonIdModificationVisuelElement = useRef<HTMLInputElement>(null);
 
   return (
@@ -80,7 +100,9 @@ const CarteVisuel = ({
           <h5 className="card-title">{visuel.Visuel}</h5>
           <p className="card-text">Ch.{visuel.chanson.CanalMidi}</p>
           <p className="card-text">Pgm {visuel.chanson.PgmMidi}</p>
-          <p className="card-text">Note {visuel.NoteMidi}</p>
+          <p className="card-text">
+            Note: {visuel.noteMidi.NoteString} Numéro:{visuel.noteMidi.id}
+          </p>
         </div>
       </div>
       <div
@@ -175,7 +197,32 @@ const CarteVisuel = ({
                   ref={PgmMidiModificationVisuelElement}
                 /> */}
               </div>
-              <div className="mb-3">
+
+              <div className="form-floating mb-3">
+                <select
+                  className="form-select"
+                  id="inputGroupSelect01"
+                  aria-label="Floating label select example"
+                  defaultValue=""
+                  onChange={(e) =>
+                    handleNoteMidiSelectPourCreationOuModificationVisuel(e)
+                  }
+                >
+                  <option value="Liste de chansons"></option>
+                  {affichageNotes.map((NoteMidi) => {
+                    return (
+                      <option key={NoteMidi.id} value={NoteMidi.id}>
+                        {NoteMidi.NoteString}
+                      </option>
+                    );
+                  })}
+                </select>
+                <label htmlFor="floatingInputValue"></label>
+                <label htmlFor="floatingPassword">Notes-Midi</label>
+              </div>
+              <div className="form-floating mb-3"></div>
+
+              {/* <div className="mb-3">
                 <label>Note Midi (1-128)</label>
                 <input
                   type="number"
@@ -185,7 +232,7 @@ const CarteVisuel = ({
                   placeholder={visuel.NoteMidi.toString()}
                   ref={NoteMidiModificationVisuelElement}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="modal-footer">
               <button

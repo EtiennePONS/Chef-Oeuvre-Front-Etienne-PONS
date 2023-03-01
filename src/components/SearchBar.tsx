@@ -1,5 +1,5 @@
 import { SetStateAction } from "react";
-import { Chanson } from "../pages/Page Play";
+import { Chanson } from "../pages/Page Home";
 
 // import "./Searchbar.css";
 
@@ -40,10 +40,7 @@ const SearchBar = ({
                   <option value="">Toutes les chansons</option>
                   {affichageChansons.map((chanson) => {
                     return (
-                      <option
-                        key={chanson.id}
-                        value={chanson.id}                
-                      >
+                      <option key={chanson.id} value={chanson.id}>
                         {chanson.Titre}
                       </option>
                     );

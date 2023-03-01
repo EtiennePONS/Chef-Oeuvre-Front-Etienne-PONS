@@ -5,7 +5,7 @@ import Searchbar from "../components/SearchBar";
 import { Chanson, ChansonAModifier } from "./Page Home";
 
 // Composant principal
-const PageMedia = () => {
+const PageChansons = () => {
   // Appel au chargement de la page
   useEffect(() => {
     axios
@@ -188,4 +188,4 @@ const PageMedia = () => {
   );
 };
 
-export default PageMedia;
+export default PageChansons;
