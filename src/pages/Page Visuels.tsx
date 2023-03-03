@@ -6,98 +6,7 @@ import { Chanson, NoteMidi, Visuel, VisuelAModifier } from "./Page Home";
 
 // Composant principal
 const PageVisuels = () => {
-  // Appel au chargement de la page
-  useEffect(() => {
-    axios
-      // recuperation des données (tout les Visuels)
-      .get("http://localhost:8080/api/visuel")
-      .then((retourReponseVisuels) => {
-        const listeCompleteVisuels = retourReponseVisuels.data;
-        setAffichageVisuels(listeCompleteVisuels);
-        // setChansonsAAfficher(retourReponseVisuels.data);
-      });
-    axios
-      // recuperation des données (toutes les chansons)
-      .get("http://localhost:8080/api/chanson")
-      .then((retourReponseChansons) => {
-        const listeCompleteChansons = retourReponseChansons.data;
-        setAffichageChansons(listeCompleteChansons);
-      });
-    axios
-      // recuperation des données (toutes les notes)
-      .get("http://localhost:8080/api/note-midi")
-      .then((retourReponseNotes) => {
-        const listeCompleteNotes = retourReponseNotes.data;
-        setAffichageNotes(listeCompleteNotes);
-      });
-  }, []);
-
-  // Fonction pour création d'un visuel
-  const handleCreationVisuel = (e: FormEvent) => {
-    e.preventDefault();
-    axios
-      .post(`http://localhost:8080/api/visuel`, {
-        Visuel: TitreCreationVisuelElement.current?.value,
-        CanalMidi: chansonChoisiPourCreationOuModificationVisuel?.CanalMidi,
-        PgmMidi: chansonChoisiPourCreationOuModificationVisuel?.PgmMidi,
-        NoteMidi: noteMidiChoisiPourCreationOuModificationVisuel?.id,
-        chanson: { id: chansonChoisiPourCreationOuModificationVisuel?.id },
-        noteMidi: { id: noteMidiChoisiPourCreationOuModificationVisuel?.id },
-      })
-      .then((retourVisuelCree) => {
-        window.location = document.location;
-      });
-  };
-
-  // Fonction pour supprimer un visuel
-  const handleSuppVisuel = (visuelASupprimer: Visuel) => {
-    axios
-      .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`)
-      .then((retourChansonSupprimee) => {
-        window.location = document.location;
-      });
-  };
-
-  // Fonction pour modifier un visuel
-  const handleModifVisuel = (
-    visuelAModifier: VisuelAModifier,
-    idvisuelAModifier: number
-  ) => {
-    axios
-      .patch(
-        `http://localhost:8080/api/visuel/${idvisuelAModifier}`,
-        visuelAModifier
-      )
-      .then((retourChansonModifiee) => {
-        window.location = document.location;
-      });
-  };
-
-  // Fonction qui permet de selectionner une chanson pour création ou modification d'un visuel
-  const handleChansonSelectPourCreationOuModificationVisuel = (e: any) => {
-    const chansonchoisi = e.currentTarget.value;
-    axios
-      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
-      .then((retourChansonChoisi) => {
-        const choixChansonPourCreationVisuel = retourChansonChoisi.data;
-        setChansonChoisiPourCreationOuModificationVisuel(
-          choixChansonPourCreationVisuel
-        );
-        console.log(choixChansonPourCreationVisuel);
-      });
-  };
-  const handleNoteMidiSelectPourCreationOuModificationVisuel = (e: any) => {
-    const noteMidichoisi = e.currentTarget.value;
-    axios
-      .get(`http://localhost:8080/api/note-midi/${noteMidichoisi}`)
-      .then((retourNoteMidiChoisi) => {
-        const choixNoteMidiPourCreationVisuel = retourNoteMidiChoisi.data;
-        setNoteMidiChoisiPourCreationOuModificationVisuel(
-          choixNoteMidiPourCreationVisuel
-        );
-        console.log(choixNoteMidiPourCreationVisuel);
-      });
-  };
+  const [compteur, setcompteur] = useState<number>(0);
   // configuration dynamique via choix d'une chanson pour création ou modification d'un visuel via useState
   const [
     chansonChoisiPourCreationOuModificationVisuel,
@@ -122,10 +31,149 @@ const PageVisuels = () => {
 
   // entrées des inputs via useRef
   const TitreCreationVisuelElement = useRef<HTMLInputElement>(null);
+  const ImagePourCreationVisuel = useRef<HTMLInputElement>(null);
   // const CanalMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const PgmMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const NoteMidiCreationVisuelElement = useRef<HTMLInputElement>(null);
   // const ChansonCreationVisuelElement = useRef<HTMLInputElement>(null);
+  // Appels au chargement de la page
+  useEffect(() => {
+    axios
+      // recuperation des données (tout les Visuels)
+      .get("http://localhost:8080/api/visuel")
+      .then((retourReponseVisuels) => {
+        const listeCompleteVisuels = retourReponseVisuels.data;
+        setAffichageVisuels(listeCompleteVisuels);
+        console.log(listeCompleteVisuels);
+        // setChansonsAAfficher(retourReponseVisuels.data);
+      });
+    axios
+      // recuperation des données (toutes les chansons)
+      .get("http://localhost:8080/api/chanson")
+      .then((retourReponseChansons) => {
+        const listeCompleteChansons = retourReponseChansons.data;
+        setAffichageChansons(listeCompleteChansons);
+      });
+    axios
+      // recuperation des données (toutes les notes)
+      .get("http://localhost:8080/api/note-midi")
+      .then((retourReponseNotes) => {
+        const listeCompleteNotes = retourReponseNotes.data;
+        setAffichageNotes(listeCompleteNotes);
+      });
+  }, [compteur]);
+
+  // Fonction pour création d'un visuel
+  const handleCreationVisuel = (e: FormEvent) => {
+    const formData = new FormData();
+    if (
+      TitreCreationVisuelElement.current &&
+      chansonChoisiPourCreationOuModificationVisuel &&
+      ImagePourCreationVisuel.current &&
+      ImagePourCreationVisuel.current.files &&
+      chansonChoisiPourCreationOuModificationVisuel &&
+      noteMidiChoisiPourCreationOuModificationVisuel
+    ) {
+      formData.append(
+        "Visuel",
+        TitreCreationVisuelElement.current.value.toString()
+      );
+      formData.append(
+        "CanalMidi",
+        chansonChoisiPourCreationOuModificationVisuel.CanalMidi.toString()
+      );
+      formData.append(
+        "PgmMidi",
+        chansonChoisiPourCreationOuModificationVisuel.PgmMidi.toString()
+      );
+      formData.append(
+        "NoteMidi",
+        noteMidiChoisiPourCreationOuModificationVisuel.id.toString()
+      );
+      formData.append(
+        "chanson",
+        JSON.stringify({
+          id: chansonChoisiPourCreationOuModificationVisuel.id,
+        })
+      );
+      formData.append(
+        "noteMidi",
+        JSON.stringify({
+          id: noteMidiChoisiPourCreationOuModificationVisuel?.id,
+        })
+      );
+      formData.append("fichier", ImagePourCreationVisuel.current.files[0]);
+      e.preventDefault();
+      for (let f of formData.entries()) {
+        console.log(f);
+      }
+      axios
+
+        .post(
+          `http://localhost:8080/api/visuel/upload`,
+          formData
+          // Visuel: TitreCreationVisuelElement.current?.value,
+          // CanalMidi: chansonChoisiPourCreationOuModificationVisuel?.CanalMidi,
+          // PgmMidi: chansonChoisiPourCreationOuModificationVisuel?.PgmMidi,
+          // NoteMidi: noteMidiChoisiPourCreationOuModificationVisuel?.id,
+          // chanson: { id: chansonChoisiPourCreationOuModificationVisuel?.id },
+          // noteMidi: { id: noteMidiChoisiPourCreationOuModificationVisuel?.id },
+        )
+        .then((retourVisuelCree) => {
+          setcompteur(compteur + 1);
+        });
+    }
+  };
+
+  // Fonction pour supprimer un visuel
+  const handleSuppVisuel = (visuelASupprimer: Visuel) => {
+    axios
+      .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`)
+      .then((retourChansonSupprimee) => {
+        setcompteur(compteur + 1);
+      });
+  };
+
+  // Fonction pour modifier un visuel
+  const handleModifVisuel = (
+    visuelAModifier: VisuelAModifier,
+    idvisuelAModifier: number
+  ) => {
+    axios
+      .patch(
+        `http://localhost:8080/api/visuel/${idvisuelAModifier}`,
+        visuelAModifier
+      )
+      .then((retourChansonModifiee) => {
+        setcompteur(compteur + 1);
+      });
+  };
+
+  // Fonction qui permet de selectionner une chanson pour création ou modification d'un visuel
+  const handleChansonSelectPourCreationOuModificationVisuel = (e: any) => {
+    const chansonchoisi = e.currentTarget.value;
+    axios
+      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
+      .then((retourChansonChoisi) => {
+        const choixChansonPourCreationVisuel = retourChansonChoisi.data;
+        setChansonChoisiPourCreationOuModificationVisuel(
+          choixChansonPourCreationVisuel
+        );
+        // console.log(choixChansonPourCreationVisuel);
+      });
+  };
+  const handleNoteMidiSelectPourCreationOuModificationVisuel = (e: any) => {
+    const noteMidichoisi = e.currentTarget.value;
+    axios
+      .get(`http://localhost:8080/api/note-midi/${noteMidichoisi}`)
+      .then((retourNoteMidiChoisi) => {
+        const choixNoteMidiPourCreationVisuel = retourNoteMidiChoisi.data;
+        setNoteMidiChoisiPourCreationOuModificationVisuel(
+          choixNoteMidiPourCreationVisuel
+        );
+        // console.log(choixNoteMidiPourCreationVisuel);
+      });
+  };
 
   return (
     <div>
@@ -165,6 +213,7 @@ const PageVisuels = () => {
                   id="inputGroupSelect01"
                   aria-label="Floating label select example"
                   defaultValue=""
+                  name="chanson"
                   onChange={(e) =>
                     handleChansonSelectPourCreationOuModificationVisuel(e)
                   }
@@ -178,11 +227,15 @@ const PageVisuels = () => {
                     );
                   })}
                 </select>
-                <label htmlFor="floatingInputValue"></label>
                 <label htmlFor="floatingPassword">Chanson</label>
               </div>
               <div className="mb-3">
-                <input className="form-control" type="file" id="formFile" />
+                <input
+                  className="form-control"
+                  ref={ImagePourCreationVisuel}
+                  type="file"
+                  id="formFile"
+                />
               </div>
               <span className="input-group-text mb-3">
                 Canal Midi{" "}
@@ -197,7 +250,8 @@ const PageVisuels = () => {
                 <input
                   type="text"
                   className="form-control"
-                  id="floatingPassword"
+                  // id="floatingPassword"
+                  name="chanson"
                   placeholder="Chanson"
                   ref={TitreCreationVisuelElement}
                 />
@@ -208,6 +262,7 @@ const PageVisuels = () => {
                   className="form-select"
                   id="inputGroupSelect01"
                   aria-label="Floating label select example"
+                  name="NoteMidi"
                   defaultValue=""
                   onChange={(e) =>
                     handleNoteMidiSelectPourCreationOuModificationVisuel(e)

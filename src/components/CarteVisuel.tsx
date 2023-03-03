@@ -22,6 +22,21 @@ const CarteVisuel = ({
   demandeSuppressionVisuel,
   donneesPourModificationVisuel,
 }: CarteVisuelProps) => {
+  const [
+    chansonChoisiPourCreationOuModificationVisuel,
+    setChansonChoisiPourCreationOuModificationVisuel,
+  ] = useState<Chanson>();
+  const [
+    noteMidiChoisiPourCreationOuModificationVisuel,
+    setNoteMidiChoisiPourCreationOuModificationVisuel,
+  ] = useState<NoteMidi>();
+
+  const VisuelModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const CanalMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const PgmMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const NoteMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
+  // const ChansonIdModificationVisuelElement = useRef<HTMLInputElement>(null);
+
   const handleChansonSelectPourCreationOuModificationVisuel = (e: any) => {
     const chansonchoisi = e.currentTarget.value;
     axios
@@ -73,21 +88,6 @@ const CarteVisuel = ({
     }
   };
 
-  const [
-    chansonChoisiPourCreationOuModificationVisuel,
-    setChansonChoisiPourCreationOuModificationVisuel,
-  ] = useState<Chanson>();
-  const [
-    noteMidiChoisiPourCreationOuModificationVisuel,
-    setNoteMidiChoisiPourCreationOuModificationVisuel,
-  ] = useState<NoteMidi>();
-
-  const VisuelModificationVisuelElement = useRef<HTMLInputElement>(null);
-  // const CanalMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
-  // const PgmMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
-  // const NoteMidiModificationVisuelElement = useRef<HTMLInputElement>(null);
-  // const ChansonIdModificationVisuelElement = useRef<HTMLInputElement>(null);
-
   return (
     <div>
       <div
@@ -96,6 +96,12 @@ const CarteVisuel = ({
         data-bs-target={`#${visuel.id.toString()}`}
       >
         <div className="card-body">
+          {/* <iframe src={`http://localhost:8080/${visuel.Image}`}></iframe> */}
+          {/* <img
+            src={`http://localhost:8080/${visuel.Image}`}
+            className="card-img-top"
+            alt="..."
+          /> */}
           <h5 className="card-title">{visuel.chanson.Titre}</h5>
           <h5 className="card-title">{visuel.Visuel}</h5>
           <p className="card-text">Ch.{visuel.chanson.CanalMidi}</p>
@@ -163,7 +169,7 @@ const CarteVisuel = ({
                   {affichageChansons.map((chanson) => {
                     return (
                       <option key={chanson.id} value={chanson.id}>
-                        {chanson.Titre}
+                        {chanson.id}
                       </option>
                     );
                   })}

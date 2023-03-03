@@ -6,7 +6,19 @@ import { Chanson, ChansonAModifier } from "./Page Home";
 
 // Composant principal
 const PageChansons = () => {
+  const [compteur, setcompteur] = useState<number>(0);
+  // affichage dynamique des chansons via useState
+  const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
+  // recherche dynamique "SearchBar" via useState
+  const [search, setSearch] = useState<string>("");
+  // recherche dynamique via filtre "dropdown" via useState
+  const [chansonsFilter, setChansonsFilter] = useState<string>("");
+  // entrées des inputs via useRef
+  const TitreCreationChansonElement = useRef<HTMLInputElement>(null);
+  const CanalMidiCreationChansonElement = useRef<HTMLInputElement>(null);
+  const PgmMidiCreationChansonElement = useRef<HTMLInputElement>(null);
   // Appel au chargement de la page
+
   useEffect(() => {
     axios
       // recuperation des données (toutes les chansons)
@@ -15,7 +27,7 @@ const PageChansons = () => {
         const listeCompleteChansons = retourReponseChansons.data;
         setAffichageChansons(listeCompleteChansons);
       });
-  }, []);
+  }, [compteur]);
 
   // Fonction pour création d'une chanson
   const handleCreationChanson = (e: FormEvent) => {
@@ -27,7 +39,7 @@ const PageChansons = () => {
         PgmMidi: PgmMidiCreationChansonElement.current?.value,
       })
       .then((retourChansonCreee) => {
-        window.location = document.location;
+        setcompteur(compteur + 1);
       });
   };
 
@@ -36,7 +48,7 @@ const PageChansons = () => {
     axios
       .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`)
       .then((retourChansonSupprimee) => {
-        window.location = document.location;
+        setcompteur(compteur + 1);
       });
   };
 
@@ -51,22 +63,10 @@ const PageChansons = () => {
         chansonAModifier
       )
       .then((retourChansonModifiee) => {
-        window.location = document.location;
+        setcompteur(compteur + 1);
       })
       .catch((error) => console.log(error));
   };
-
-  // affichage dynamique des chansons via useState
-  const [affichageChansons, setAffichageChansons] = useState<Chanson[]>([]);
-  // recherche dynamique "SearchBar" via useState
-  const [search, setSearch] = useState<string>("");
-  // recherche dynamique via filtre "dropdown" via useState
-  const [chansonsFilter, setChansonsFilter] = useState<string>("");
-
-  // entrées des inputs via useRef
-  const TitreCreationChansonElement = useRef<HTMLInputElement>(null);
-  const CanalMidiCreationChansonElement = useRef<HTMLInputElement>(null);
-  const PgmMidiCreationChansonElement = useRef<HTMLInputElement>(null);
 
   return (
     <div>

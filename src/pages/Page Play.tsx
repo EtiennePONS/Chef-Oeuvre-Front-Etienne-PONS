@@ -11,13 +11,11 @@ let lastChanson: Chanson;
 
 // Composant principal
 const PagePlay = () => {
-
   // useState sur l'affichage de la chanson et du visuel a afficher
   const [chansonAAfficher, setChansonAAfficher] = useState<Chanson>();
   const [visuelAAfficher, setVisuelAAfficher] = useState<Visuel>();
 
-
-// Appel au chargement de la page, sur la capacité du navigateur à recevoir ou envoyer des signaux numériques Midi.
+  // Appel au chargement de la page, sur la capacité du navigateur à recevoir ou envoyer des signaux numériques Midi.
   useEffect(() => {
     window.navigator
       .requestMIDIAccess()
@@ -79,8 +77,8 @@ const PagePlay = () => {
         let not = data[1]; //  not est le deuxieme octet de la donnée "data".
         let note = not + 1; // j'ajoute 1 à not pour me situer entre (1-128) au lieu de (0-127).
         // let velocity = data[2]; velocity est le troisieme octet de la donnée "data" (non utilisée dans notre cas).
-        // Le console.log qui suit permet de visualiser n'importe quel signal MIDI (attaque de note) provenant d'une machine Exterieure
 
+        // Le console.log qui suit permet de visualiser n'importe quel signal MIDI (attaque de note) provenant d'une machine Exterieure
         // console.log(
         //   `Canal MIDI: ${channel}, Programme MIDI: ${lastChanson.PgmMidi}, Note MIDI: ${note}, Vélocité: ${velocity}`
         // );
@@ -126,6 +124,11 @@ const PagePlay = () => {
           </h6>
           <p className="card-text">Pgm{visuelAAfficher?.chanson.PgmMidi}</p>
           <p className="card-text">Note{visuelAAfficher?.NoteMidi}</p>
+          <img
+            src={`http://localhost:8080/${visuelAAfficher?.Image}`}
+            className="card-img-top"
+            alt="..."
+          />
         </div>
       </div>
     </div>

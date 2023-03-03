@@ -19,6 +19,11 @@ const CarteChanson = ({
   const handleSuppressionChanson = () => {
     demandeSuppressionChanson(chanson);
   };
+
+  const TitreModificationChansonElement = useRef<HTMLInputElement>(null);
+  const CanalMidiModificationChansonElement = useRef<HTMLInputElement>(null);
+  const PgmMidiModificationChansonElement = useRef<HTMLInputElement>(null);
+
   const handleModifChanson = (chansonid: number) => {
     if (
       TitreModificationChansonElement.current &&
@@ -33,10 +38,6 @@ const CarteChanson = ({
       donneesPourModificationChanson(chansonAModifier, chansonid);
     }
   };
-
-  const TitreModificationChansonElement = useRef<HTMLInputElement>(null);
-  const CanalMidiModificationChansonElement = useRef<HTMLInputElement>(null);
-  const PgmMidiModificationChansonElement = useRef<HTMLInputElement>(null);
 
   return (
     <div>

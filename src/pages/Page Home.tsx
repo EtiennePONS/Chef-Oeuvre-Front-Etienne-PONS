@@ -22,6 +22,7 @@ export interface Visuel {
     id: number;
     NoteString: string;
   };
+  Image: string;
 }
 export interface ChansonAModifier {
   Titre: string;
