@@ -1,78 +1,108 @@
 import { NavLink } from "react-router-dom";
 import "./NavBar.css";
+// import "../../public/icons/PageHome.png";
 
 const NavBar = () => {
   return (
     <div>
-      <nav className="navbar">
-        <form className="container-fluid justify-content-start">
-          <NavLink to="/" end className="nav-link">
-            <button className="btn btn-lg btn-bd-primary me-4" type="button">
-              <img
-                src="/icons/PageHome.svg"
-                alt="Logo Frigo"
-                width="80"
-                height="80"
-                className="LogoNavbar1"
-              />
-            </button>
-          </NavLink>
-          <NavLink to="/pagePlay" end className="nav-link">
-            <button className="btn btn-lg btn-bd-primary me-4" type="button">
-              <img
-                src="/icons/PagePlay.png"
-                alt="Logo Frigo"
-                width="80"
-                height="80"
-                className="LogoNavbar2"
-              />
-            </button>
-          </NavLink>
-          <NavLink to="/pageInscription" end className="nav-link">
-            <button className="btn btn-lg btn-bd-primary me-4" type="button">
-              <img
-                src="/icons/PageInscription.png"
-                alt="Logo Frigo"
-                width="80"
-                height="80"
-                className="LogoNavbar3"
-              />
-            </button>
-          </NavLink>
-          <NavLink to="/pageConnexion" end className="nav-link">
-            <button className="btn btn-lg btn-bd-primary me-4" type="button">
-              <img
-                src="/icons/PageConnexion.png"
-                alt="Logo Frigo"
-                width="80"
-                height="80"
-                className="LogoNavbar4"
-              />
-            </button>
-          </NavLink>
-          <NavLink to="/pageMédiathèque" end className="nav-link">
-            <button className="btn btn-lg btn-bd-primary me-4" type="button">
-              <img
-                src="/icons/PageMedia.png"
-                alt="Logo Frigo"
-                width="80"
-                height="80"
-                className="LogoNavbar5"
-              />
-            </button>
-          </NavLink>
-          <NavLink to="/pageGalerie" end className="nav-link">
-            <button className="btn btn-lg btn-bd-primary me-4" type="button">
-              <img
-                src="/icons/PageGalerie.png"
-                alt="Logo Frigo"
-                width="80"
-                height="80"
-                className="LogoNavbar6"
-              />
-            </button>
-          </NavLink>
-        </form>
+      <nav
+        className="navbar navbar-expand-lg
+      //  bg-body-tertiary 
+       bg-dark"
+        data-bs-theme="dark"
+      >
+        <div className="container-fluid">
+          <a className="navbar-brand" href="">
+            Navbar
+          </a>
+          <button
+            className="navbar-toggler"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+          >
+            <span className="navbar-toggler-icon"></span>
+          </button>
+          <div className="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+              <li className="nav-item">
+                <NavLink to="/" end className="nav-link">
+                  <button className="btn btn-dark btn-Navbar" type="submit">
+                    <img
+                      width="50"
+                      src="/icons/PageHome.png"
+                      className="LogoNavBar"
+                      alt="..."
+                    />
+                  </button>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/pagePlay" end className="nav-link">
+                  <button className="btn btn-dark btn-Navbar" type="submit">
+                    <img
+                      width="50"
+                      src="/icons/PagePlay.png"
+                      className="LogoNavBar"
+                      alt="..."
+                    />
+                  </button>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/pageInscription" end className="nav-link">
+                  <button className="btn btn-dark btn-Navbar" type="submit">
+                    <img
+                      width="50"
+                      src="/icons/PageInscription.png"
+                      className="LogoNavBar"
+                      alt="..."
+                    />
+                  </button>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/pageConnexion" end className="nav-link">
+                  <button className="btn btn-dark btn-Navbar" type="submit">
+                    <img
+                      width="50"
+                      src="/icons/PageConnexion.png"
+                      className="LogoNavBar"
+                      alt="..."
+                    />
+                  </button>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/pageMédiathèque" end className="nav-link">
+                  <button className="btn btn-dark btn-Navbar" type="submit">
+                    <img
+                      width="50"
+                      src="/icons/PageMedia.png"
+                      className="LogoNavBar"
+                      alt="..."
+                    />
+                  </button>
+                </NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to="/pageGalerie" end className="nav-link">
+                  <button className="btn btn-dark btn-Navbar" type="submit">
+                    <img
+                      width="50"
+                      src="/icons/PageGalerie.png"
+                      className="LogoNavBar"
+                      alt="..."
+                    />
+                  </button>
+                </NavLink>
+              </li>
+            </ul>
+          </div>
+        </div>
       </nav>
     </div>
   );

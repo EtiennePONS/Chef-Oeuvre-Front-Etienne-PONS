@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Chanson, Visuel } from "./Page Home";
+// import { Chanson, Visuel } from "../../public/icons/logo192.png";
 // import "./Page Play.css";
 
 // interface PagePlayProps {
@@ -104,29 +105,34 @@ const PagePlay = () => {
 
   return (
     <div>
-      <div className="card text-bg-sombre">
+      <div className="card text-bg-sombre" data-bs-theme="dark">
         <div className="card-body">
-          <h5 className="card-title">{chansonAAfficher?.Titre}</h5>
+          <h5 className="card-title mb-2 text-muted">
+            {chansonAAfficher?.Titre}
+          </h5>
           <h6 className="card-subtitle mb-2 text-muted">
             Ch.
             {chansonAAfficher?.CanalMidi}
           </h6>
-          <p className="card-text">Pgm{chansonAAfficher?.PgmMidi}</p>
+          <p className="card-text mb-2 text-muted">
+            Pgm{chansonAAfficher?.PgmMidi}
+          </p>
         </div>
       </div>
-      <div className="card text-bg-sombre">
+      <div className="card text-bg-sombre" data-bs-theme="dark">
         <div className="card-body">
-          <h5 className="card-title">{visuelAAfficher?.chanson.Titre}</h5>
+          {/* <h5 className="card-title">{visuelAAfficher?.chanson.Titre}</h5>
           <h5 className="card-title">{visuelAAfficher?.Visuel}</h5>
           <h6 className="card-subtitle mb-2 text-muted">
             Ch.
             {visuelAAfficher?.chanson.CanalMidi}
           </h6>
           <p className="card-text">Pgm{visuelAAfficher?.chanson.PgmMidi}</p>
-          <p className="card-text">Note{visuelAAfficher?.NoteMidi}</p>
+          <p className="card-text">Note{visuelAAfficher?.NoteMidi}</p> */}
           <img
+            width="650"
             src={`http://localhost:8080/${visuelAAfficher?.Image}`}
-            className="card-img-top"
+            className="img-fluid"
             alt="..."
           />
         </div>
