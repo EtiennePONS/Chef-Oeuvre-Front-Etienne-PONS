@@ -12,9 +12,12 @@ const NavBar = () => {
         data-bs-theme="dark"
       >
         <div className="container-fluid">
-          <a className="navbar-brand" href="">
-            Navbar
-          </a>
+          <img
+            width="74"
+            src="/icons/logo.png"
+            className="Logo shadow"
+            alt="..."
+          />
           <button
             className="navbar-toggler"
             type="button"

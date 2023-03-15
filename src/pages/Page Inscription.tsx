@@ -77,7 +77,7 @@ const PageInscription = () => {
       <div className="form-floating mb-3">
         <button
           type="submit"
-          className="btn btn-primary mb-3"
+          className="btn btn-primary mb-3 Lily"
           onClick={handleSubmitForm}
         >
           S'inscrire

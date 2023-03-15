@@ -39,8 +39,11 @@ const CarteVisuel = ({
 
   const handleChansonSelectPourCreationOuModificationVisuel = (e: any) => {
     const chansonchoisi = e.currentTarget.value;
+    const token = localStorage.getItem("token");
     axios
-      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
+      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((retourChansonChoisi) => {
         const choixChansonPourCreationVisuel = retourChansonChoisi.data;
         setChansonChoisiPourCreationOuModificationVisuel(
@@ -92,6 +95,7 @@ const CarteVisuel = ({
     <div>
       <div
         className="btn card text-center mb-3 shadow"
+        data-bs-theme="light"
         data-bs-toggle="modal"
         data-bs-target={`#${visuel.id.toString()}`}
       >
@@ -169,7 +173,7 @@ const CarteVisuel = ({
                   {affichageChansons.map((chanson) => {
                     return (
                       <option key={chanson.id} value={chanson.id}>
-                        {chanson.id}
+                        {chanson.Titre}
                       </option>
                     );
                   })}

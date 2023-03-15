@@ -20,9 +20,12 @@ const PageChansons = () => {
   // Appel au chargement de la page
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
     axios
       // recuperation des données (toutes les chansons)
-      .get("http://localhost:8080/api/chanson")
+      .get(`http://localhost:8080/api/chanson`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((retourReponseChansons) => {
         const listeCompleteChansons = retourReponseChansons.data;
         setAffichageChansons(listeCompleteChansons);
@@ -32,12 +35,17 @@ const PageChansons = () => {
   // Fonction pour création d'une chanson
   const handleCreationChanson = (e: FormEvent) => {
     e.preventDefault();
+    const token = localStorage.getItem("token");
     axios
-      .post(`http://localhost:8080/api/chanson`, {
-        Titre: TitreCreationChansonElement.current?.value,
-        CanalMidi: CanalMidiCreationChansonElement.current?.value,
-        PgmMidi: PgmMidiCreationChansonElement.current?.value,
-      })
+      .post(
+        `http://localhost:8080/api/chanson`,
+        {
+          Titre: TitreCreationChansonElement.current?.value,
+          CanalMidi: CanalMidiCreationChansonElement.current?.value,
+          PgmMidi: PgmMidiCreationChansonElement.current?.value,
+        },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
       .then((retourChansonCreee) => {
         setcompteur(compteur + 1);
       });
@@ -45,8 +53,11 @@ const PageChansons = () => {
 
   // Fonction pour supprimer une chanson
   const handleSuppChanson = (chansonASupprimer: Chanson) => {
+    const token = localStorage.getItem("token");
     axios
-      .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`)
+      .delete(`http://localhost:8080/api/chanson/${chansonASupprimer.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((retourChansonSupprimee) => {
         setcompteur(compteur + 1);
       });
@@ -57,10 +68,12 @@ const PageChansons = () => {
     chansonAModifier: ChansonAModifier,
     idchansonAModifier: number
   ) => {
+    const token = localStorage.getItem("token");
     axios
       .patch(
         `http://localhost:8080/api/chanson/${idchansonAModifier}`,
-        chansonAModifier
+        chansonAModifier,
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       .then((retourChansonModifiee) => {
         setcompteur(compteur + 1);

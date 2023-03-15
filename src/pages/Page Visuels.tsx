@@ -38,9 +38,12 @@ const PageVisuels = () => {
   // const ChansonCreationVisuelElement = useRef<HTMLInputElement>(null);
   // Appels au chargement de la page
   useEffect(() => {
+    const token = localStorage.getItem("token");
     axios
       // recuperation des données (tout les Visuels)
-      .get("http://localhost:8080/api/visuel")
+      .get(`http://localhost:8080/api/visuel`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((retourReponseVisuels) => {
         const listeCompleteVisuels = retourReponseVisuels.data;
         setAffichageVisuels(listeCompleteVisuels);
@@ -107,11 +110,12 @@ const PageVisuels = () => {
       for (let f of formData.entries()) {
         console.log(f);
       }
+      const token = localStorage.getItem("token");
       axios
-
         .post(
           `http://localhost:8080/api/visuel/upload`,
-          formData
+          formData,
+          { headers: { Authorization: `Bearer ${token}` } }
           // Visuel: TitreCreationVisuelElement.current?.value,
           // CanalMidi: chansonChoisiPourCreationOuModificationVisuel?.CanalMidi,
           // PgmMidi: chansonChoisiPourCreationOuModificationVisuel?.PgmMidi,
@@ -127,8 +131,11 @@ const PageVisuels = () => {
 
   // Fonction pour supprimer un visuel
   const handleSuppVisuel = (visuelASupprimer: Visuel) => {
+    const token = localStorage.getItem("token");
     axios
-      .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`)
+      .delete(`http://localhost:8080/api/visuel/${visuelASupprimer.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((retourChansonSupprimee) => {
         setcompteur(compteur + 1);
       });
@@ -139,10 +146,14 @@ const PageVisuels = () => {
     visuelAModifier: VisuelAModifier,
     idvisuelAModifier: number
   ) => {
+    const token = localStorage.getItem("token");
     axios
       .patch(
         `http://localhost:8080/api/visuel/${idvisuelAModifier}`,
-        visuelAModifier
+        visuelAModifier,
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       )
       .then((retourChansonModifiee) => {
         setcompteur(compteur + 1);

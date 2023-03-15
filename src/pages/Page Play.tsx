@@ -1,12 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Chanson, Visuel } from "./Page Home";
-// import { Chanson, Visuel } from "../../public/icons/logo192.png";
-// import "./Page Play.css";
-
-// interface PagePlayProps {
-//   objetUser: MusicienUtilisateur | undefined;
-// }
 
 let lastChanson: Chanson;
 
@@ -48,15 +42,19 @@ const PagePlay = () => {
         // Le console.log qui suit permet de visualiser n'importe quel signal MIDI (changement de programme) provenant d'une machine Exterieure
         // console.log(`Canal MIDI: ${channel}, Programme MIDI: ${programme}`);
 
-        // mon appel axios je le fais si le canal et le programme que je capte sont différents de la chansonAAfficher du useState (Jérémy)
         if (!chansonAAfficher) {
           // si la Chanson à afficher est differente: alors, lancement de la requette Axios qui suit.
+          const token = localStorage.getItem("token");
           axios
-            .post(`http://localhost:8080/api/chanson/charge`, {
-              // Requette Post avec un body
-              CanalMidi: channel,
-              PgmMidi: programme,
-            })
+            .post(
+              `http://localhost:8080/api/chanson/charge`,
+              {
+                // Requette Post avec un body
+                CanalMidi: channel,
+                PgmMidi: programme,
+              },
+              { headers: { Authorization: `Bearer ${token}` } }
+            )
 
             .then((retourChanson) => {
               // retour de la requette
@@ -85,13 +83,18 @@ const PagePlay = () => {
         // );
         if (!visuelAAfficher) {
           // si le visuel à afficher est different: alors, lancement de la requette Axios qui suit.
+          const token = localStorage.getItem("token");
           axios
-            .post(`http://localhost:8080/api/visuel/charge`, {
-              // Requette Post avec un body
-              CanalMidi: channel,
-              PgmMidi: lastChanson.PgmMidi,
-              NoteMidi: note,
-            })
+            .post(
+              `http://localhost:8080/api/visuel/charge`,
+              {
+                // Requette Post avec un body
+                CanalMidi: channel,
+                PgmMidi: lastChanson.PgmMidi,
+                NoteMidi: note,
+              },
+              { headers: { Authorization: `Bearer ${token}` } }
+            )
 
             .then((retourVisuel) => {
               // retour de la requette
