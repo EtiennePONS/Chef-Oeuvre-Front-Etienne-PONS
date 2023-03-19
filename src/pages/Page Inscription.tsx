@@ -74,7 +74,7 @@ const PageInscription = () => {
         />
         <label htmlFor="floatingPassword">Password</label>
       </div>
-      <div className="form-floating mb-3">
+      <div className="col-auto">
         <button
           type="submit"
           className="btn btn-primary mb-3 Lily"
@@ -84,7 +84,7 @@ const PageInscription = () => {
         </button>
       </div>
       <div className="form-floating mb-3">
-        <button type="button" className="btn btn-primary mb-3">
+        <button type="button" className="btn btn-secondary mb-3">
           <NavLink to="/" end className="nav-link">
             Annuler
           </NavLink>

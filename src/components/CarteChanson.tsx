@@ -1,5 +1,6 @@
 import { useRef } from "react";
 import { Chanson, ChansonAModifier } from "../pages/Page Home";
+import "./CarteChanson.css";
 
 interface CarteChansonProps {
   chanson: Chanson;
@@ -42,11 +43,12 @@ const CarteChanson = ({
   return (
     <div>
       <div
-        className="btn card text-center mb-3 shadow"
+        className="btn card text-center mb-3 shadow cartechanson"
+        data-bs-theme="dark"
         data-bs-toggle="modal"
         data-bs-target={`#${chanson.id.toString()}`}
       >
-        <div className="card-body">
+        <div className="card-body cardbodychanson">
           <h5 className="card-title">{chanson.Titre}</h5>
           <p className="card-text">Ch.{chanson.CanalMidi}</p>
           <p className="card-text">Pgm {chanson.PgmMidi}</p>

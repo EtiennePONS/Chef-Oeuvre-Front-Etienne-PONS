@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Chanson, Visuel } from "./Page Home";
-
+import "./Page Play.css";
 let lastChanson: Chanson;
 
 // Composant principal
@@ -10,7 +10,8 @@ const PagePlay = () => {
   const [chansonAAfficher, setChansonAAfficher] = useState<Chanson>();
   const [visuelAAfficher, setVisuelAAfficher] = useState<Visuel>();
 
-  // Appel au chargement de la page, sur la capacité du navigateur à recevoir ou envoyer des signaux numériques Midi.
+  // Appel au chargement de la page, sur la capacité du navigateur
+  // à recevoir ou envoyer des signaux numériques Midi.
   useEffect(() => {
     window.navigator
       .requestMIDIAccess()
@@ -113,13 +114,13 @@ const PagePlay = () => {
           <h5 className="card-title mb-2 text-muted">
             {chansonAAfficher?.Titre}
           </h5>
-          <h6 className="card-subtitle mb-2 text-muted">
+          {/* <h6 className="card-subtitle mb-2 text-muted">
             Ch.
             {chansonAAfficher?.CanalMidi}
           </h6>
           <p className="card-text mb-2 text-muted">
             Pgm{chansonAAfficher?.PgmMidi}
-          </p>
+          </p> */}
         </div>
       </div>
       <div className="card text-bg-sombre" data-bs-theme="dark">
@@ -133,7 +134,7 @@ const PagePlay = () => {
           <p className="card-text">Pgm{visuelAAfficher?.chanson.PgmMidi}</p>
           <p className="card-text">Note{visuelAAfficher?.NoteMidi}</p> */}
           <img
-            width="650"
+            width="715"
             src={`http://localhost:8080/${visuelAAfficher?.Image}`}
             className="img-fluid"
             alt="..."

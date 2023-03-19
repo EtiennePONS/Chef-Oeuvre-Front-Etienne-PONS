@@ -25,7 +25,7 @@ const SearchBar = ({
   };
   return (
     <div className="container">
-      <div className="row">
+      <div className="row mb-3">
         <div className="col-xs-8 col-xs-offset-2">
           <div className="input-group">
             <div className="input-group-btn search-panel input-group-text">

@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SetStateAction, useRef, useState } from "react";
 import { Chanson, NoteMidi, Visuel, VisuelAModifier } from "../pages/Page Home";
+import "./CarteVisuel.css";
 
 interface CarteVisuelProps {
   visuel: Visuel;
@@ -94,24 +95,27 @@ const CarteVisuel = ({
   return (
     <div>
       <div
-        className="btn card text-center mb-3 shadow"
-        data-bs-theme="light"
+        className="btn card text-center mb-3 shadow cartevisuel"
+        data-bs-theme="dark"
         data-bs-toggle="modal"
         data-bs-target={`#${visuel.id.toString()}`}
       >
-        <div className="card-body">
+        <div className="card-body cardbodyvisuel shadow">
           {/* <iframe src={`http://localhost:8080/${visuel.Image}`}></iframe> */}
           {/* <img
             src={`http://localhost:8080/${visuel.Image}`}
             className="card-img-top"
             alt="..."
           /> */}
-          <h5 className="card-title">{visuel.chanson.Titre}</h5>
+          <h5 className="card-title cartevisueltitre">
+            {visuel.chanson.Titre}
+          </h5>
           <h5 className="card-title">{visuel.Visuel}</h5>
-          <p className="card-text">Ch.{visuel.chanson.CanalMidi}</p>
-          <p className="card-text">Pgm {visuel.chanson.PgmMidi}</p>
+          {/* <p className="card-text">Ch.{visuel.chanson.CanalMidi}</p>
+          <p className="card-text">Pgm {visuel.chanson.PgmMidi}</p> */}
           <p className="card-text">
-            Note: {visuel.noteMidi.NoteString} Numéro:{visuel.noteMidi.id}
+            Note: {visuel.noteMidi.NoteString}
+            {/* Numéro:{visuel.noteMidi.id} */}
           </p>
         </div>
       </div>

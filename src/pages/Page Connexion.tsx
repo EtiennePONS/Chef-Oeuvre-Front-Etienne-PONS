@@ -76,7 +76,7 @@ const PageConnexion = ({ PropsUtilisateurConnecté }: ConnexionProps) => {
         </button>
       </div>
       <div className="form-floating mb-3">
-        <button type="button" className="btn btn-primary mb-3">
+        <button type="button" className="btn btn-secondary mb-3">
           <NavLink to="/" end className="nav-link">
             Annuler
           </NavLink>

@@ -1,0 +1,11 @@
+.cartechanson {
+  width: 175px;
+  margin: 4px;
+}
+.cardbodychanson {
+  background-color: #b5d2cb;
+  border-radius: 5px;
+}
+.card-text {
+  color: #6d5865;
+}

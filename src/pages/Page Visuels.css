@@ -1,0 +1,9 @@
+.SurfaceDeChoixDeVisuels {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width: 99%;
+  max-width: 1464px;
+  background: #151418;
+  margin: 0px auto 0;
+}

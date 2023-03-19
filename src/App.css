@@ -1,5 +1,12 @@
 .App {
   text-align: center;
-  /* background-color: #1e1f20; */
+  background-color: #151418;
+
   height: 100vh;
+}
+.bienvenue {
+  color: #6d5865;
+  /* margin: 10px; */
+  padding: 2px;
+  background-color: #151418;
 }

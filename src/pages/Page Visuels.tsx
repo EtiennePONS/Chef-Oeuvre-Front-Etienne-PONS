@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import CarteVisuel from "../components/CarteVisuel";
 import SearchBar from "../components/SearchBar";
 import { Chanson, NoteMidi, Visuel, VisuelAModifier } from "./Page Home";
+import "./Page Visuels.css";
 
 // Composant principal
 const PageVisuels = () => {
@@ -52,7 +53,9 @@ const PageVisuels = () => {
       });
     axios
       // recuperation des données (toutes les chansons)
-      .get("http://localhost:8080/api/chanson")
+      .get("http://localhost:8080/api/chanson", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((retourReponseChansons) => {
         const listeCompleteChansons = retourReponseChansons.data;
         setAffichageChansons(listeCompleteChansons);
@@ -163,8 +166,11 @@ const PageVisuels = () => {
   // Fonction qui permet de selectionner une chanson pour création ou modification d'un visuel
   const handleChansonSelectPourCreationOuModificationVisuel = (e: any) => {
     const chansonchoisi = e.currentTarget.value;
+    const token = localStorage.getItem("token");
     axios
-      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`)
+      .get(`http://localhost:8080/api/chanson/${chansonchoisi}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then((retourChansonChoisi) => {
         const choixChansonPourCreationVisuel = retourChansonChoisi.data;
         setChansonChoisiPourCreationOuModificationVisuel(
@@ -188,14 +194,14 @@ const PageVisuels = () => {
 
   return (
     <div>
-      <h1>Page-Visuels</h1>
+      {/* <h1>Page-Visuels</h1> */}
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn mb-3 btn-success"
         data-bs-toggle="modal"
         data-bs-target="#creationVisuel"
       >
-        Créer un nouveau visuel
+        Créer un nouveau Visuel
       </button>
       <div
         className="modal fade"
@@ -317,34 +323,35 @@ const PageVisuels = () => {
         parentUseStateSearch={setSearch}
         parentUseStateFiltre={setChansonsFilter}
       />
-      <div className="SurfaceDeChoixDeVisuels" />
-      {affichageVisuels
-        .filter((visuel) => {
-          if (chansonsFilter !== "") {
-            return visuel.chanson.id === Number(chansonsFilter);
-          } else {
-            return visuel.chanson.Titre;
-          }
-        })
-        .filter((visuel) => {
-          return visuel.chanson.Titre.toLocaleLowerCase().includes(search);
-        })
+      <div className="SurfaceDeChoixDeVisuels">
+        {affichageVisuels
+          .filter((visuel) => {
+            if (chansonsFilter !== "") {
+              return visuel.chanson.id === Number(chansonsFilter);
+            } else {
+              return visuel.chanson.Titre;
+            }
+          })
+          .filter((visuel) => {
+            return visuel.chanson.Titre.toLocaleLowerCase().includes(search);
+          })
 
-        .map((visuel) => {
-          return (
-            <CarteVisuel
-              visuel={visuel}
-              affichageChansons={affichageChansons}
-              affichageNotes={affichageNotes}
-              parentUseStateFiltre={
-                handleChansonSelectPourCreationOuModificationVisuel
-              }
-              demandeSuppressionVisuel={handleSuppVisuel}
-              donneesPourModificationVisuel={handleModifVisuel}
-              key={visuel.id}
-            />
-          );
-        })}
+          .map((visuel) => {
+            return (
+              <CarteVisuel
+                visuel={visuel}
+                affichageChansons={affichageChansons}
+                affichageNotes={affichageNotes}
+                parentUseStateFiltre={
+                  handleChansonSelectPourCreationOuModificationVisuel
+                }
+                demandeSuppressionVisuel={handleSuppVisuel}
+                donneesPourModificationVisuel={handleModifVisuel}
+                key={visuel.id}
+              />
+            );
+          })}
+      </div>
     </div>
   );
 };

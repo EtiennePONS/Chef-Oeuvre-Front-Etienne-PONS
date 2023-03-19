@@ -3,6 +3,7 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import CarteChanson from "../components/CarteChanson";
 import Searchbar from "../components/SearchBar";
 import { Chanson, ChansonAModifier } from "./Page Home";
+import "./Page Chansons.css";
 
 // Composant principal
 const PageChansons = () => {
@@ -83,14 +84,14 @@ const PageChansons = () => {
 
   return (
     <div>
-      <h1>Page-Chansons</h1>
+      {/* <h1>Page-Chansons</h1> */}
       <button
         type="button"
-        className="btn btn-primary"
+        className="btn btn-primary mb-3 initChanson"
         data-bs-toggle="modal"
         data-bs-target="#creationChanson"
       >
-        Créer une nouvelle chanson
+        Créer une nouvelle Chanson
       </button>
       <div
         className="modal fade"
@@ -173,30 +174,31 @@ const PageChansons = () => {
         parentUseStateSearch={setSearch}
         parentUseStateFiltre={setChansonsFilter}
       />
-      <div className="SurfaceDeChoixDeChansons" />
-      {affichageChansons
-        .filter((chanson) => {
-          if (chansonsFilter !== "") {
-            return chanson.id === Number(chansonsFilter);
-          } else {
-            return chanson;
-          }
-        })
-        .filter((Chanson) => {
-          return Chanson.Titre.toLocaleLowerCase().includes(search);
-        })
-        .map((chanson) => {
-          return (
-            // <div >
-            <CarteChanson
-              chanson={chanson}
-              demandeSuppressionChanson={handleSuppChanson}
-              donneesPourModificationChanson={handleModifChanson}
-              key={chanson.id}
-            />
-            // </div>
-          );
-        })}
+      <div className="SurfaceDeChoixDeChansons">
+        {affichageChansons
+          .filter((chanson) => {
+            if (chansonsFilter !== "") {
+              return chanson.id === Number(chansonsFilter);
+            } else {
+              return chanson;
+            }
+          })
+          .filter((Chanson) => {
+            return Chanson.Titre.toLocaleLowerCase().includes(search);
+          })
+          .map((chanson) => {
+            return (
+              // <div >
+              <CarteChanson
+                chanson={chanson}
+                demandeSuppressionChanson={handleSuppChanson}
+                donneesPourModificationChanson={handleModifChanson}
+                key={chanson.id}
+              />
+              // </div>
+            );
+          })}
+      </div>
     </div>
   );
 };
